@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 3
-Total Questions Answered: 27
+Total Sessions: 4
+Total Questions Answered: 36
 
 ## Topic Scores
 
@@ -14,7 +14,7 @@ Total Questions Answered: 27
 | Expiration & Exercise | 1 | 90% | 2 | Assignment direction locked in by session 2 |
 | Covered Calls & CSPs | 5 | 90% | 1 | Strong — P&L, assignment, breakeven, scenarios all correct. Instinctively mentioned volatility. |
 | Delta | 2 | 80% | 1 | Strong conceptual grasp. Recurring error: forgetting ×100 on position delta. Intuited gamma unprompted. |
-| Gamma | 2 | 0% | 0 | Not yet started |
+| Gamma | 2 | 88% | 1 | Strong — ATM/expiration risk, long/short gamma, pin risk all correct. ×100 habit locked in. |
 | Theta | 2 | 0% | 0 | Not yet started |
 | Vega | 2 | 0% | 0 | Not yet started |
 | Rho | 2 | 0% | 0 | Not yet started |
@@ -37,7 +37,7 @@ Total Questions Answered: 27
 | Assignment Risk | 6 | 0% | 0 | Not yet started |
 
 ## Weak Areas (prioritize these)
-- Delta: consistently forgets to multiply by 100 when calculating position delta — needs reinforcement
+- None currently — Delta ×100 habit locked in, Gamma strong
 
 ## User Preferences
 - Currently focused on Level 1 foundations only — has not started Greeks yet
@@ -63,3 +63,10 @@ Total Questions Answered: 27
 - Correct / Partial / Incorrect: 8 / 3 / 0
 - Key gaps identified: Forgets to multiply by 100 when calculating position delta (happened twice). Conceptual understanding is strong — intuited gamma unprompted.
 - Notes: Ready for Gamma next session. Reinforce ×100 rule at start of next session.
+
+### 2026-06-05 — Session 4 (Gamma)
+- Topics covered: Gamma — delta acceleration, ATM sensitivity, long/short gamma, pin risk, earnings scenario
+- Questions asked: 9
+- Correct / Partial / Incorrect: 8 / 1 / 0
+- Key gaps identified: Slight imprecision on gamma risk near expiration (said "assets become volatile" vs. delta whipsawing at strike). Everything else clean.
+- Notes: ×100 habit locked in. Ready for Theta next session.
