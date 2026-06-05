@@ -1,0 +1,58 @@
+# Options Trading Progress
+
+Last Updated: 2026-06-05
+Total Sessions: 2
+Total Questions Answered: 16
+
+## Topic Scores
+
+| Topic | Level | Score | Sessions | Notes |
+|-------|-------|-------|----------|-------|
+| Calls & Puts | 1 | 90% | 1 | Strong after drilling — fixed short put loss direction |
+| Intrinsic vs Extrinsic Value | 1 | 95% | 1 | Solid — named intrinsic value unprompted, correctly explained time value |
+| In/At/Out of the Money | 1 | 95% | 1 | Correct and confident |
+| Expiration & Exercise | 1 | 90% | 2 | Assignment direction locked in by session 2 |
+| Covered Calls & CSPs | 5 | 90% | 1 | Strong — P&L, assignment, breakeven, scenarios all correct. Instinctively mentioned volatility. |
+| Delta | 2 | 0% | 0 | Not yet started |
+| Gamma | 2 | 0% | 0 | Not yet started |
+| Theta | 2 | 0% | 0 | Not yet started |
+| Vega | 2 | 0% | 0 | Not yet started |
+| Rho | 2 | 0% | 0 | Not yet started |
+| Implied Volatility | 3 | 0% | 0 | Not yet started |
+| Historical/Realized Volatility | 3 | 0% | 0 | Not yet started |
+| IV Rank & IV Percentile | 3 | 0% | 0 | Not yet started |
+| Volatility Skew | 3 | 0% | 0 | Not yet started |
+| VIX | 3 | 0% | 0 | Not yet started |
+| Vol Crush | 3 | 0% | 0 | Not yet started |
+| Reversals & Conversions | 4 | 0% | 0 | Not yet started |
+| Synthetic Positions | 4 | 0% | 0 | Not yet started |
+| Box Spreads | 4 | 0% | 0 | Not yet started |
+| Vertical Spreads | 5 | 0% | 0 | Not yet started |
+| Straddles & Strangles | 5 | 0% | 0 | Not yet started |
+| Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
+| Calendars & Diagonals | 5 | 0% | 0 | Not yet started |
+| Covered Calls & CSPs | 5 | 0% | 0 | Not yet started |
+| Position Sizing | 6 | 0% | 0 | Not yet started |
+| Rolling Positions | 6 | 0% | 0 | Not yet started |
+| Assignment Risk | 6 | 0% | 0 | Not yet started |
+
+## Weak Areas (prioritize these)
+- None at Level 1 — ready to begin Level 2 (Greeks)
+
+## User Preferences
+- Currently focused on Level 1 foundations only — has not started Greeks yet
+
+## Session Log
+
+### 2026-06-05 — Session 1 (Calibration + Level 1 Drill)
+- Topics covered: Calls & Puts, Moneyness, Intrinsic vs Extrinsic Value, Expiration & Exercise
+- Questions asked: 8
+- Correct / Partial / Incorrect: 5 / 2 / 0
+- Key gaps identified: Short put loss direction (fixed by end of session); put assignment direction (buyer SELLS to you, you BUY stock); premium math double-counting error on loss calculation
+
+### 2026-06-05 — Session 2 (Level 1 Reinforcement + Covered Calls)
+- Topics covered: Covered calls, assignment direction, P&L, scenarios
+- Questions asked: 8
+- Correct / Partial / Incorrect: 7 / 1 / 0
+- Key gaps identified: Forgot to include premium in P&L once (self-corrected quickly). Instinctively mentioned volatility unprompted — good sign for Level 2 readiness.
+- Notes: Level 1 complete. Ready to begin Level 2 (Delta) next session.
