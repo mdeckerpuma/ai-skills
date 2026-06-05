@@ -54,13 +54,13 @@ Create the file and directory on first run if they don't exist. No other sub-fil
 
 3. **Prompt if needed.** If the user invoked the skill without describing their day, ask: "What did you work on today?" Wait for their response. Accept whatever they give — short is fine.
 
-4. **Write the entry.** Append to `journal.md` in this format:
+4. **Write the entry.** The user will likely give you phrases, keywords, or bullet points — not full sentences. Convert what they give you into a clean, natural summary written in first person. Do not add facts or embellish — only expand what they actually said into readable prose. Keep their voice. Append to `journal.md` in this format:
 
 ```
 ---
 ## [Weekday, Month DD, YYYY]
 
-[User's entry — written naturally, first person, as they described it. Do not embellish or add things they didn't say. Keep their voice.]
+[Polished summary in first person, expanded from the user's phrases. Natural and concise — not a bullet list.]
 
 ---
 ```
