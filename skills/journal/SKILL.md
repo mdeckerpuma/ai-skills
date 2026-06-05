@@ -38,7 +38,7 @@ Standalone — does not chain into other skills.
 
 ## Memory Allocation
 
-Journal is saved to: `C:\Users\mdecker\ai-skills\journal\journal.md`
+Journal is saved to: `C:\Users\mdecker\ai-skills\skills\journal\journal.md`
 
 Create the file and directory on first run if they don't exist. No other sub-files needed.
 
