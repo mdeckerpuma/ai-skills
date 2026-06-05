@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 2
-Total Questions Answered: 16
+Total Sessions: 3
+Total Questions Answered: 27
 
 ## Topic Scores
 
@@ -13,7 +13,7 @@ Total Questions Answered: 16
 | In/At/Out of the Money | 1 | 95% | 1 | Correct and confident |
 | Expiration & Exercise | 1 | 90% | 2 | Assignment direction locked in by session 2 |
 | Covered Calls & CSPs | 5 | 90% | 1 | Strong — P&L, assignment, breakeven, scenarios all correct. Instinctively mentioned volatility. |
-| Delta | 2 | 0% | 0 | Not yet started |
+| Delta | 2 | 80% | 1 | Strong conceptual grasp. Recurring error: forgetting ×100 on position delta. Intuited gamma unprompted. |
 | Gamma | 2 | 0% | 0 | Not yet started |
 | Theta | 2 | 0% | 0 | Not yet started |
 | Vega | 2 | 0% | 0 | Not yet started |
@@ -37,7 +37,7 @@ Total Questions Answered: 16
 | Assignment Risk | 6 | 0% | 0 | Not yet started |
 
 ## Weak Areas (prioritize these)
-- None at Level 1 — ready to begin Level 2 (Greeks)
+- Delta: consistently forgets to multiply by 100 when calculating position delta — needs reinforcement
 
 ## User Preferences
 - Currently focused on Level 1 foundations only — has not started Greeks yet
@@ -56,3 +56,10 @@ Total Questions Answered: 16
 - Correct / Partial / Incorrect: 7 / 1 / 0
 - Key gaps identified: Forgot to include premium in P&L once (self-corrected quickly). Instinctively mentioned volatility unprompted — good sign for Level 2 readiness.
 - Notes: Level 1 complete. Ready to begin Level 2 (Delta) next session.
+
+### 2026-06-05 — Session 3 (Delta)
+- Topics covered: Delta — direction, calculation, position delta, probability, hedging, gamma preview
+- Questions asked: 11
+- Correct / Partial / Incorrect: 8 / 3 / 0
+- Key gaps identified: Forgets to multiply by 100 when calculating position delta (happened twice). Conceptual understanding is strong — intuited gamma unprompted.
+- Notes: Ready for Gamma next session. Reinforce ×100 rule at start of next session.
