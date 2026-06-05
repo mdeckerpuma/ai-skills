@@ -19,7 +19,6 @@ Walks the user through installing a new or updated skill into their `.claude\ski
 
 - **Never push to a public repository** — always confirm the repo is private before pushing.
 - **Never delete existing skills** — only replace or add.
-- **Never skip confirmation** — always show the user what's about to happen before doing it.
 - **If anything is unclear**, ask the user the necessary questions before proceeding.
 
 ---
@@ -38,7 +37,7 @@ Walks the user through installing a new or updated skill into their `.claude\ski
 
 No sub-files needed. All state is managed through the conversation and the user's filesystem.
 
-Key paths to remember:
+Key paths:
 - **Skills runtime folder:** `C:\Users\mdecker\.claude\skills\`
 - **GitHub backup folder:** `C:\Users\mdecker\ai-skills\skills\`
 - **GitHub repo:** `https://github.com/mdeckerpuma/ai-skills`
@@ -48,26 +47,22 @@ Key paths to remember:
 ## Steps
 
 1. **Confirm the new skill file is ready**
-   Ask the user:
-   > "Do you have the new `.skill` file downloaded? It should be in your Downloads folder."
-   Wait for confirmation before continuing.
+   Ask: "Do you have the new `.skill` file downloaded in your Downloads folder?"
+   Wait for confirmation.
 
 2. **Rename the file**
-   Tell the user:
-   > "Right-click the `.skill` file → Rename → change the extension from `.skill` to `.zip`"
+   Tell the user: "Right-click the `.skill` file → Rename → change `.skill` to `.zip`"
    Wait for confirmation.
 
 3. **Extract and install into Claude Code**
-   Tell the user:
-   > "Double-click the `.zip` file to open it, then drag the folder inside into:
-   > `C:\Users\mdecker\.claude\skills\`
-   > If a folder with the same name already exists, replace it."
+   Tell the user: "Double-click the `.zip` to open it, then drag the folder inside into `C:\Users\mdecker\.claude\skills\` — click Replace if prompted."
    Wait for confirmation.
 
-4. **Dump all terminal commands upfront**
-   As soon as the user confirms step 3 is done, immediately show ALL remaining commands at once — do not wait or ask between them. Present them clearly labeled so the user can run them one at a time:
+4. **Dump all terminal commands at once**
+   As soon as the user confirms step 3 is done, immediately show ALL commands at once.
+   Do NOT wait between commands. Do NOT ask one at a time. Show everything together like this:
 
-   > "Here are all the commands — run them one at a time and let me know if any errors:"
+   "Here are all the commands — run them one at a time and let me know if any errors:"
 
    **Command 1 — Copy to GitHub backup folder:**
    ```powershell
@@ -97,17 +92,17 @@ Key paths to remember:
    Then wait silently. Only respond if the user reports an error.
 
 5. **Confirm success**
-   Once the user confirms all commands ran without errors, say:
-   > "✅ Done! Your skill is installed in Claude Code and backed up to GitHub.
-   > You can verify at: https://github.com/mdeckerpuma/ai-skills"
+   Once the user confirms all commands ran without errors:
+   "✅ Done! Your skill is installed in Claude Code and backed up to GitHub.
+   Verify at: https://github.com/mdeckerpuma/ai-skills"
 
 ---
 
 ## If Something Breaks
 
-If any command fails, ask the user:
+Ask the user:
 1. "What error message are you seeing?"
-2. "Which command number did it fail on?"
+2. "Which command number failed?"
 3. "Can you confirm your Windows username?" (to verify paths)
 4. "Is VS Code connected to GitHub?" (if push fails)
 
@@ -123,7 +118,7 @@ Standalone — does not chain into other skills.
 
 ## Versioning & Iteration
 
-- If paths change (new computer, new username) → update the paths in the Steps section
-- If GitHub authentication keeps failing → add a step to run `git config --global credential.helper store`
-- If the user gets a new GitHub repo → update the repo URL in Memory Allocation
+- If paths change → update paths in Memory Allocation and Steps
+- If GitHub auth keeps failing → add `git config --global credential.helper store` as a fix step
+- If user gets a new GitHub repo → update the repo URL
 - After 5+ real runs → add eval cases to catch common failure points
