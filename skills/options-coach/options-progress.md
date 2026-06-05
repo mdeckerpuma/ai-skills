@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 4
-Total Questions Answered: 36
+Total Sessions: 5
+Total Questions Answered: 44
 
 ## Topic Scores
 
@@ -15,7 +15,7 @@ Total Questions Answered: 36
 | Covered Calls & CSPs | 5 | 90% | 1 | Strong — P&L, assignment, breakeven, scenarios all correct. Instinctively mentioned volatility. |
 | Delta | 2 | 80% | 1 | Strong conceptual grasp. Recurring error: forgetting ×100 on position delta. Intuited gamma unprompted. |
 | Gamma | 2 | 88% | 1 | Strong — ATM/expiration risk, long/short gamma, pin risk all correct. ×100 habit locked in. |
-| Theta | 2 | 0% | 0 | Not yet started |
+| Theta | 2 | 90% | 1 | Strong — decay calculation, long vs short theta, DTE impact, trade management all correct. Small P&L confusion early (fixed quickly). |
 | Vega | 2 | 0% | 0 | Not yet started |
 | Rho | 2 | 0% | 0 | Not yet started |
 | Implied Volatility | 3 | 0% | 0 | Not yet started |
@@ -70,3 +70,10 @@ Total Questions Answered: 36
 - Correct / Partial / Incorrect: 8 / 1 / 0
 - Key gaps identified: Slight imprecision on gamma risk near expiration (said "assets become volatile" vs. delta whipsawing at strike). Everything else clean.
 - Notes: ×100 habit locked in. Ready for Theta next session.
+
+### 2026-06-05 — Session 5 (Theta)
+- Topics covered: Theta — daily decay, long vs short theta, DTE impact, trade management scenarios
+- Questions asked: 8
+- Correct / Partial / Incorrect: 7 / 1 / 0
+- Key gaps identified: Brief confusion on P&L vs premium collected (clarified quickly). Trade management instincts are strong.
+- Notes: Ready for Vega next session.
