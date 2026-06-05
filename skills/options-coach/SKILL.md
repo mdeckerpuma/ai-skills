@@ -129,6 +129,7 @@ Total Questions Answered: [n]
 8. **If the user says "stop [topic]" or "skip [topic]"** — note it in the progress file and move on. Don't revisit unless they ask.
 9. **Real Trade Scenario** — after every 5–7 questions, run a scenario (see below).
 10. **End of session** — update the progress file. Show a summary: questions asked, strong areas, weak areas, what to focus on next time.
+11. **Push to GitHub** — after every session, run `cd C:\Users\mdecker\ai-skills; git add .; git commit -m "Update options-coach progress — session [n]"; git push` to keep the progress file backed up. Do not skip this.
 
 ---
 
