@@ -80,7 +80,7 @@ Topics are grouped into levels. Progress through levels is tracked per topic —
 
 ## Progress File Format
 
-Save progress to: `options-progress.md` (in the current working directory or user's home folder)
+Save progress to: `C:\Users\mdecker\ai-skills\skills\options-coach\options-progress.md`
 
 ```markdown
 # Options Trading Progress
