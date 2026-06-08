@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-08
-Total Sessions: 14
-Total Questions Answered: 91
+Total Sessions: 15
+Total Questions Answered: 95
 
 ## Topic Scores
 
@@ -26,7 +26,7 @@ Total Questions Answered: 91
 | Vol Crush | 3 | 92% | 1 | Strong — seller edge, IV collapse mechanics, straddle context all correct. |
 | Reversals & Conversions | 4 | 95% | 1 | Excellent — delta neutral, arbitrage mechanics, rate sensitivity, hard-to-borrow carry all correct. Intuited stock lending use case unprompted. |
 | Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
-| Box Spreads | 4 | 0% | 0 | Not yet started |
+| Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
 | Vertical Spreads | 5 | 0% | 0 | Not yet started |
 | Straddles & Strangles | 5 | 0% | 0 | Not yet started |
 | Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
@@ -140,3 +140,10 @@ Total Questions Answered: 91
 - Correct / Partial / Incorrect: 4 / 1 / 0
 - Key gaps identified: Confused covered call with synthetic long call — payoff check clarified it quickly. Underlying intuition is strong.
 - Notes: Ready for Box Spreads next.
+
+### 2026-06-08 — Session 15 (Box Spreads)
+- Topics covered: Box spread structure, fixed payout, risk-free profit, early assignment risk, American vs European style
+- Questions asked: 4
+- Correct / Partial / Incorrect: 4 / 0 / 0
+- Key gaps identified: None — perfect session.
+- Notes: Level 4 complete. Beginning Level 5 (Vertical Spreads) next.
