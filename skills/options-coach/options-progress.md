@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-08
-Total Sessions: 13
-Total Questions Answered: 86
+Total Sessions: 14
+Total Questions Answered: 91
 
 ## Topic Scores
 
@@ -25,7 +25,7 @@ Total Questions Answered: 86
 | VIX | 3 | 95% | 1 | Perfect — fear gauge, mean reversion, high/low VIX environments all correct. |
 | Vol Crush | 3 | 92% | 1 | Strong — seller edge, IV collapse mechanics, straddle context all correct. |
 | Reversals & Conversions | 4 | 95% | 1 | Excellent — delta neutral, arbitrage mechanics, rate sensitivity, hard-to-borrow carry all correct. Intuited stock lending use case unprompted. |
-| Synthetic Positions | 4 | 0% | 0 | Not yet started |
+| Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
 | Box Spreads | 4 | 0% | 0 | Not yet started |
 | Vertical Spreads | 5 | 0% | 0 | Not yet started |
 | Straddles & Strangles | 5 | 0% | 0 | Not yet started |
@@ -133,3 +133,10 @@ Total Questions Answered: 86
 - Correct / Partial / Incorrect: 6 / 0 / 0
 - Key gaps identified: None — perfect session. Intuited stock lending use case and delta-neutral nature unprompted.
 - Notes: Ready for Synthetic Positions next.
+
+### 2026-06-08 — Session 14 (Synthetic Positions)
+- Topics covered: Synthetic long/short stock, synthetic long call, covered call = synthetic short put
+- Questions asked: 5
+- Correct / Partial / Incorrect: 4 / 1 / 0
+- Key gaps identified: Confused covered call with synthetic long call — payoff check clarified it quickly. Underlying intuition is strong.
+- Notes: Ready for Box Spreads next.
