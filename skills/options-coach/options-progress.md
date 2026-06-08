@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 7
-Total Questions Answered: 55
+Total Sessions: 8
+Total Questions Answered: 63
 
 ## Topic Scores
 
@@ -18,7 +18,7 @@ Total Questions Answered: 55
 | Theta | 2 | 90% | 1 | Strong — decay calculation, long vs short theta, DTE impact, trade management all correct. Small P&L confusion early (fixed quickly). |
 | Vega | 2 | 92% | 1 | Excellent — vega/theta tradeoff, long/short vega, vol crush all correct. Near-perfect session. |
 | Rho | 2 | 95% | 1 | Excellent — nailed cost of carry logic unprompted. Strong conceptual thinker. |
-| Implied Volatility | 3 | 0% | 0 | Not yet started |
+| Implied Volatility | 3 | 93% | 1 | Excellent — vol crush, IV mean reversion, buy vs sell environments, daily move calc all correct. |
 | Historical/Realized Volatility | 3 | 0% | 0 | Not yet started |
 | IV Rank & IV Percentile | 3 | 0% | 0 | Not yet started |
 | Volatility Skew | 3 | 0% | 0 | Not yet started |
@@ -91,3 +91,10 @@ Total Questions Answered: 55
 - Correct / Partial / Incorrect: 2 / 0 / 0
 - Key gaps identified: None — unprompted cost of carry explanation was excellent.
 - Notes: Level 2 complete. Beginning Level 3 (Implied Volatility) next.
+
+### 2026-06-05 — Session 8 (Implied Volatility)
+- Topics covered: IV — definition, daily move calculation, high/low IV environments, vol crush, earnings scenarios
+- Questions asked: 8
+- Correct / Partial / Incorrect: 8 / 0 / 0
+- Key gaps identified: None — perfect session.
+- Notes: Ready for HV/RV next session.
