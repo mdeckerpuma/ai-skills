@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 6
-Total Questions Answered: 53
+Total Sessions: 7
+Total Questions Answered: 55
 
 ## Topic Scores
 
@@ -17,7 +17,7 @@ Total Questions Answered: 53
 | Gamma | 2 | 88% | 1 | Strong — ATM/expiration risk, long/short gamma, pin risk all correct. ×100 habit locked in. |
 | Theta | 2 | 90% | 1 | Strong — decay calculation, long vs short theta, DTE impact, trade management all correct. Small P&L confusion early (fixed quickly). |
 | Vega | 2 | 92% | 1 | Excellent — vega/theta tradeoff, long/short vega, vol crush all correct. Near-perfect session. |
-| Rho | 2 | 0% | 0 | Not yet started |
+| Rho | 2 | 95% | 1 | Excellent — nailed cost of carry logic unprompted. Strong conceptual thinker. |
 | Implied Volatility | 3 | 0% | 0 | Not yet started |
 | Historical/Realized Volatility | 3 | 0% | 0 | Not yet started |
 | IV Rank & IV Percentile | 3 | 0% | 0 | Not yet started |
@@ -84,3 +84,10 @@ Total Questions Answered: 53
 - Correct / Partial / Incorrect: 8 / 1 / 0
 - Key gaps identified: Minor framing error (put "gained" vs "lost" value on IV drop — direction was correct). Otherwise clean.
 - Notes: Ready for Rho next session. Consider moving quickly through Rho (brief topic) then into Level 3 Volatility.
+
+### 2026-06-05 — Session 7 (Rho)
+- Topics covered: Rho — interest rate sensitivity, cost of carry, LEAPS relevance
+- Questions asked: 2
+- Correct / Partial / Incorrect: 2 / 0 / 0
+- Key gaps identified: None — unprompted cost of carry explanation was excellent.
+- Notes: Level 2 complete. Beginning Level 3 (Implied Volatility) next.
