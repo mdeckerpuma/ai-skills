@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 8
-Total Questions Answered: 63
+Total Sessions: 9
+Total Questions Answered: 65
 
 ## Topic Scores
 
@@ -19,8 +19,8 @@ Total Questions Answered: 63
 | Vega | 2 | 92% | 1 | Excellent — vega/theta tradeoff, long/short vega, vol crush all correct. Near-perfect session. |
 | Rho | 2 | 95% | 1 | Excellent — nailed cost of carry logic unprompted. Strong conceptual thinker. |
 | Implied Volatility | 3 | 93% | 1 | Excellent — vol crush, IV mean reversion, buy vs sell environments, daily move calc all correct. |
-| Historical/Realized Volatility | 3 | 0% | 0 | Not yet started |
-| IV Rank & IV Percentile | 3 | 0% | 0 | Not yet started |
+| Historical/Realized Volatility | 3 | 95% | 1 | Solid — IV vs HV comparison, volatility risk premium, seller edge all correct. |
+| IV Rank & IV Percentile | 3 | 0% | 0 | Introduced, not yet drilled — pick up here next session |
 | Volatility Skew | 3 | 0% | 0 | Not yet started |
 | VIX | 3 | 0% | 0 | Not yet started |
 | Vol Crush | 3 | 0% | 0 | Not yet started |
@@ -98,3 +98,10 @@ Total Questions Answered: 63
 - Correct / Partial / Incorrect: 8 / 0 / 0
 - Key gaps identified: None — perfect session.
 - Notes: Ready for HV/RV next session.
+
+### 2026-06-05 — Session 9 (HV/RV + IV Rank intro)
+- Topics covered: Historical/Realized Volatility, volatility risk premium, IV Rank & IV Percentile (intro only)
+- Questions asked: 2
+- Correct / Partial / Incorrect: 2 / 0 / 0
+- Key gaps identified: None.
+- Notes: IVR/IVP introduced but not drilled — start here next session with the calculation question.
