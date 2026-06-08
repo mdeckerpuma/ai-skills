@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-05
-Total Sessions: 5
-Total Questions Answered: 44
+Total Sessions: 6
+Total Questions Answered: 53
 
 ## Topic Scores
 
@@ -16,7 +16,7 @@ Total Questions Answered: 44
 | Delta | 2 | 80% | 1 | Strong conceptual grasp. Recurring error: forgetting ×100 on position delta. Intuited gamma unprompted. |
 | Gamma | 2 | 88% | 1 | Strong — ATM/expiration risk, long/short gamma, pin risk all correct. ×100 habit locked in. |
 | Theta | 2 | 90% | 1 | Strong — decay calculation, long vs short theta, DTE impact, trade management all correct. Small P&L confusion early (fixed quickly). |
-| Vega | 2 | 0% | 0 | Not yet started |
+| Vega | 2 | 92% | 1 | Excellent — vega/theta tradeoff, long/short vega, vol crush all correct. Near-perfect session. |
 | Rho | 2 | 0% | 0 | Not yet started |
 | Implied Volatility | 3 | 0% | 0 | Not yet started |
 | Historical/Realized Volatility | 3 | 0% | 0 | Not yet started |
@@ -77,3 +77,10 @@ Total Questions Answered: 44
 - Correct / Partial / Incorrect: 7 / 1 / 0
 - Key gaps identified: Brief confusion on P&L vs premium collected (clarified quickly). Trade management instincts are strong.
 - Notes: Ready for Vega next session.
+
+### 2026-06-05 — Session 6 (Vega)
+- Topics covered: Vega — IV sensitivity, long/short vega, DTE impact, vega vs theta tradeoff, vol crush scenario
+- Questions asked: 9
+- Correct / Partial / Incorrect: 8 / 1 / 0
+- Key gaps identified: Minor framing error (put "gained" vs "lost" value on IV drop — direction was correct). Otherwise clean.
+- Notes: Ready for Rho next session. Consider moving quickly through Rho (brief topic) then into Level 3 Volatility.
