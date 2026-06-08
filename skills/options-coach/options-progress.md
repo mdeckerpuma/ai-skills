@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-08
-Total Sessions: 11
-Total Questions Answered: 74
+Total Sessions: 12
+Total Questions Answered: 80
 
 ## Topic Scores
 
@@ -22,8 +22,8 @@ Total Questions Answered: 74
 | Historical/Realized Volatility | 3 | 95% | 1 | Solid — IV vs HV comparison, volatility risk premium, seller edge all correct. |
 | IV Rank & IV Percentile | 3 | 88% | 1 | IVR calc correct. IVP concept needed explanation but understood quickly. Spike distortion concept solid. |
 | Volatility Skew | 3 | 85% | 1 | Strong — put skew, reverse skew, seller edge all correct. Instinctively described spread trades twice. Minor ATM vs OTM pricing confusion. |
-| VIX | 3 | 0% | 0 | Not yet started |
-| Vol Crush | 3 | 0% | 0 | Not yet started |
+| VIX | 3 | 95% | 1 | Perfect — fear gauge, mean reversion, high/low VIX environments all correct. |
+| Vol Crush | 3 | 92% | 1 | Strong — seller edge, IV collapse mechanics, straddle context all correct. |
 | Reversals & Conversions | 4 | 0% | 0 | Not yet started |
 | Synthetic Positions | 4 | 0% | 0 | Not yet started |
 | Box Spreads | 4 | 0% | 0 | Not yet started |
@@ -119,3 +119,10 @@ Total Questions Answered: 74
 - Correct / Partial / Incorrect: 4 / 1 / 0
 - Key gaps identified: Minor — described ATM put as cheaper than OTM for hedging (reversed). Instinctively described put spreads twice without being taught them — strong intuition.
 - Notes: Introduce vertical spreads earlier than planned (Level 5) since user keeps arriving at them naturally. Ready for VIX next.
+
+### 2026-06-08 — Session 12 (VIX + Vol Crush)
+- Topics covered: VIX levels, fear gauge mechanics, high/low VIX environments, vol crush, earnings straddle P&L
+- Questions asked: 6
+- Correct / Partial / Incorrect: 6 / 0 / 0
+- Key gaps identified: None — clean sweep.
+- Notes: Level 3 complete. Beginning Level 4 (Reversals & Conversions) next session.
