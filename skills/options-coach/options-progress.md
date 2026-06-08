@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-08
-Total Sessions: 12
-Total Questions Answered: 80
+Total Sessions: 13
+Total Questions Answered: 86
 
 ## Topic Scores
 
@@ -24,7 +24,7 @@ Total Questions Answered: 80
 | Volatility Skew | 3 | 85% | 1 | Strong — put skew, reverse skew, seller edge all correct. Instinctively described spread trades twice. Minor ATM vs OTM pricing confusion. |
 | VIX | 3 | 95% | 1 | Perfect — fear gauge, mean reversion, high/low VIX environments all correct. |
 | Vol Crush | 3 | 92% | 1 | Strong — seller edge, IV collapse mechanics, straddle context all correct. |
-| Reversals & Conversions | 4 | 0% | 0 | Not yet started |
+| Reversals & Conversions | 4 | 95% | 1 | Excellent — delta neutral, arbitrage mechanics, rate sensitivity, hard-to-borrow carry all correct. Intuited stock lending use case unprompted. |
 | Synthetic Positions | 4 | 0% | 0 | Not yet started |
 | Box Spreads | 4 | 0% | 0 | Not yet started |
 | Vertical Spreads | 5 | 0% | 0 | Not yet started |
@@ -126,3 +126,10 @@ Total Questions Answered: 80
 - Correct / Partial / Incorrect: 6 / 0 / 0
 - Key gaps identified: None — clean sweep.
 - Notes: Level 3 complete. Beginning Level 4 (Reversals & Conversions) next session.
+
+### 2026-06-08 — Session 13 (Reversals & Conversions)
+- Topics covered: Put-call parity, conversion/reversal legs, arbitrage mechanics, rate sensitivity, hard-to-borrow carry trade
+- Questions asked: 6
+- Correct / Partial / Incorrect: 6 / 0 / 0
+- Key gaps identified: None — perfect session. Intuited stock lending use case and delta-neutral nature unprompted.
+- Notes: Ready for Synthetic Positions next.
