@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-08
-Total Sessions: 15
-Total Questions Answered: 95
+Total Sessions: 16
+Total Questions Answered: 104
 
 ## Topic Scores
 
@@ -27,7 +27,7 @@ Total Questions Answered: 95
 | Reversals & Conversions | 4 | 95% | 1 | Excellent — delta neutral, arbitrage mechanics, rate sensitivity, hard-to-borrow carry all correct. Intuited stock lending use case unprompted. |
 | Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
 | Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
-| Vertical Spreads | 5 | 0% | 0 | Not yet started |
+| Vertical Spreads | 5 | 92% | 1 | Excellent — all four spread types, debit vs credit, IV environment selection, P&L all correct. Minor wording on spread name (bullish vs bull). |
 | Straddles & Strangles | 5 | 0% | 0 | Not yet started |
 | Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
 | Calendars & Diagonals | 5 | 0% | 0 | Not yet started |
@@ -147,3 +147,10 @@ Total Questions Answered: 95
 - Correct / Partial / Incorrect: 4 / 0 / 0
 - Key gaps identified: None — perfect session.
 - Notes: Level 4 complete. Beginning Level 5 (Vertical Spreads) next.
+
+### 2026-06-08 — Session 16 (Vertical Spreads)
+- Topics covered: All four vertical spreads, debit vs credit, IV environment selection, earnings scenario
+- Questions asked: 9
+- Correct / Partial / Incorrect: 9 / 0 / 0
+- Key gaps identified: Minor — said "bullish put spread" instead of "bull put spread." Numbers and concepts perfect throughout.
+- Notes: Ready for Straddles & Strangles next.
