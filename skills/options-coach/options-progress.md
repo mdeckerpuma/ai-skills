@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-08
-Total Sessions: 10
-Total Questions Answered: 69
+Total Sessions: 11
+Total Questions Answered: 74
 
 ## Topic Scores
 
@@ -21,7 +21,7 @@ Total Questions Answered: 69
 | Implied Volatility | 3 | 93% | 1 | Excellent — vol crush, IV mean reversion, buy vs sell environments, daily move calc all correct. |
 | Historical/Realized Volatility | 3 | 95% | 1 | Solid — IV vs HV comparison, volatility risk premium, seller edge all correct. |
 | IV Rank & IV Percentile | 3 | 88% | 1 | IVR calc correct. IVP concept needed explanation but understood quickly. Spike distortion concept solid. |
-| Volatility Skew | 3 | 0% | 0 | Not yet started |
+| Volatility Skew | 3 | 85% | 1 | Strong — put skew, reverse skew, seller edge all correct. Instinctively described spread trades twice. Minor ATM vs OTM pricing confusion. |
 | VIX | 3 | 0% | 0 | Not yet started |
 | Vol Crush | 3 | 0% | 0 | Not yet started |
 | Reversals & Conversions | 4 | 0% | 0 | Not yet started |
@@ -112,3 +112,10 @@ Total Questions Answered: 69
 - Correct / Partial / Incorrect: 3 / 1 / 0
 - Key gaps identified: IVP concept needed refresher. Slight wording mix-up on spike distortion (said spike inflates IVP range — actually inflates IVR). Understood quickly after explanation.
 - Notes: Ready for Volatility Skew next.
+
+### 2026-06-08 — Session 11 (Volatility Skew)
+- Topics covered: Put skew, reverse skew, skew-based trading edge, spread intuition
+- Questions asked: 5
+- Correct / Partial / Incorrect: 4 / 1 / 0
+- Key gaps identified: Minor — described ATM put as cheaper than OTM for hedging (reversed). Instinctively described put spreads twice without being taught them — strong intuition.
+- Notes: Introduce vertical spreads earlier than planned (Level 5) since user keeps arriving at them naturally. Ready for VIX next.
