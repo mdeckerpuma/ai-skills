@@ -1,8 +1,8 @@
 # Options Trading Progress
 
-Last Updated: 2026-06-05
-Total Sessions: 9
-Total Questions Answered: 65
+Last Updated: 2026-06-08
+Total Sessions: 10
+Total Questions Answered: 69
 
 ## Topic Scores
 
@@ -20,7 +20,7 @@ Total Questions Answered: 65
 | Rho | 2 | 95% | 1 | Excellent — nailed cost of carry logic unprompted. Strong conceptual thinker. |
 | Implied Volatility | 3 | 93% | 1 | Excellent — vol crush, IV mean reversion, buy vs sell environments, daily move calc all correct. |
 | Historical/Realized Volatility | 3 | 95% | 1 | Solid — IV vs HV comparison, volatility risk premium, seller edge all correct. |
-| IV Rank & IV Percentile | 3 | 0% | 0 | Introduced, not yet drilled — pick up here next session |
+| IV Rank & IV Percentile | 3 | 88% | 1 | IVR calc correct. IVP concept needed explanation but understood quickly. Spike distortion concept solid. |
 | Volatility Skew | 3 | 0% | 0 | Not yet started |
 | VIX | 3 | 0% | 0 | Not yet started |
 | Vol Crush | 3 | 0% | 0 | Not yet started |
@@ -105,3 +105,10 @@ Total Questions Answered: 65
 - Correct / Partial / Incorrect: 2 / 0 / 0
 - Key gaps identified: None.
 - Notes: IVR/IVP introduced but not drilled — start here next session with the calculation question.
+
+### 2026-06-08 — Session 10 (IVR/IVP)
+- Topics covered: IV Rank calculation, IV Percentile, IVR vs IVP divergence, spike distortion
+- Questions asked: 4
+- Correct / Partial / Incorrect: 3 / 1 / 0
+- Key gaps identified: IVP concept needed refresher. Slight wording mix-up on spike distortion (said spike inflates IVP range — actually inflates IVR). Understood quickly after explanation.
+- Notes: Ready for Volatility Skew next.
