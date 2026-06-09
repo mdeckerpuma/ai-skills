@@ -1,8 +1,8 @@
 # Options Trading Progress
 
-Last Updated: 2026-06-08
-Total Sessions: 16
-Total Questions Answered: 104
+Last Updated: 2026-06-09
+Total Sessions: 17
+Total Questions Answered: 110
 
 ## Topic Scores
 
@@ -28,7 +28,7 @@ Total Questions Answered: 104
 | Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
 | Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
 | Vertical Spreads | 5 | 92% | 1 | Excellent — all four spread types, debit vs credit, IV environment selection, P&L all correct. Minor wording on spread name (bullish vs bull). |
-| Straddles & Strangles | 5 | 0% | 0 | Not yet started |
+| Straddles & Strangles | 5 | 75% | 1 | Structure correct. IV environment initially backwards (corrected). Missed delta-neutral / gamma distinction. Breakeven math careless error (not conceptual). Session cut short — needs completion. |
 | Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
 | Calendars & Diagonals | 5 | 0% | 0 | Not yet started |
 | Covered Calls & CSPs | 5 | 0% | 0 | Not yet started |
@@ -40,7 +40,7 @@ Total Questions Answered: 104
 - None currently — Delta ×100 habit locked in, Gamma strong
 
 ## User Preferences
-- Currently focused on Level 1 foundations only — has not started Greeks yet
+- Deep in Level 5 strategies — Levels 1-4 complete
 
 ## Session Log
 
@@ -154,3 +154,10 @@ Total Questions Answered: 104
 - Correct / Partial / Incorrect: 9 / 0 / 0
 - Key gaps identified: Minor — said "bullish put spread" instead of "bull put spread." Numbers and concepts perfect throughout.
 - Notes: Ready for Straddles & Strangles next.
+
+### 2026-06-09 — Session 17 (Straddles & Strangles — intro, cut short)
+- Topics covered: Straddle vs strangle structure, breakevens, short straddle max profit/loss, IV environment, Greeks
+- Questions asked: 6
+- Correct / Partial / Incorrect: 1 / 4 / 1
+- Key gaps identified: Initially described strangle structure when asked about straddle (corrected). IV environment had long/short backwards — key conceptual gap, corrected and understood well. Delta on long straddle: said "working for you" instead of delta-neutral; missed gamma as the key Greek for movement. Breakeven lower calc was careless arithmetic (user confirmed, not a concept gap).
+- Notes: Session cut short mid-scenario. Resume next session with: strangle breakeven comparison, scenario completion, then move to risk management and when to use each.
