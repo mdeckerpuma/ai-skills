@@ -1,8 +1,8 @@
 # Options Trading Progress
 
 Last Updated: 2026-06-09
-Total Sessions: 17
-Total Questions Answered: 110
+Total Sessions: 18
+Total Questions Answered: 112
 
 ## Topic Scores
 
@@ -28,7 +28,7 @@ Total Questions Answered: 110
 | Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
 | Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
 | Vertical Spreads | 5 | 92% | 1 | Excellent — all four spread types, debit vs credit, IV environment selection, P&L all correct. Minor wording on spread name (bullish vs bull). |
-| Straddles & Strangles | 5 | 75% | 1 | Structure correct. IV environment initially backwards (corrected). Missed delta-neutral / gamma distinction. Breakeven math careless error (not conceptual). Session cut short — needs completion. |
+| Straddles & Strangles | 5 | 80% | 2 | Strangle breakevens perfect. Earnings straddle IV environment right direction — missed vol crush nuance for earnings context. Delta-neutral/gamma distinction still needs reinforcement. Scenario incomplete. |
 | Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
 | Calendars & Diagonals | 5 | 0% | 0 | Not yet started |
 | Covered Calls & CSPs | 5 | 0% | 0 | Not yet started |
@@ -161,3 +161,10 @@ Total Questions Answered: 110
 - Correct / Partial / Incorrect: 1 / 4 / 1
 - Key gaps identified: Initially described strangle structure when asked about straddle (corrected). IV environment had long/short backwards — key conceptual gap, corrected and understood well. Delta on long straddle: said "working for you" instead of delta-neutral; missed gamma as the key Greek for movement. Breakeven lower calc was careless arithmetic (user confirmed, not a concept gap).
 - Notes: Session cut short mid-scenario. Resume next session with: strangle breakeven comparison, scenario completion, then move to risk management and when to use each.
+
+### 2026-06-09 — Session 18 (Straddles & Strangles — continued, cut short)
+- Topics covered: Strangle breakevens, earnings straddle scenario (partial — IV environment question)
+- Questions asked: 2
+- Correct / Partial / Incorrect: 1 / 1 / 0
+- Key gaps identified: Strangle breakevens clean. Earnings straddle IV environment — right direction (low IV = buy), missed the vol crush post-earnings nuance and the implied move concept ($11.50 = expected move threshold).
+- Notes: Scenario still incomplete. Next session: finish earnings straddle scenario, then complete the topic with risk management and when to use straddles vs strangles.
