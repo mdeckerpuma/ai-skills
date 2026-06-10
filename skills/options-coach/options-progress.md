@@ -1,8 +1,8 @@
 # Options Trading Progress
 
-Last Updated: 2026-06-09
-Total Sessions: 18
-Total Questions Answered: 112
+Last Updated: 2026-06-10
+Total Sessions: 19
+Total Questions Answered: 115
 
 ## Topic Scores
 
@@ -28,7 +28,7 @@ Total Questions Answered: 112
 | Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
 | Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
 | Vertical Spreads | 5 | 92% | 1 | Excellent — all four spread types, debit vs credit, IV environment selection, P&L all correct. Minor wording on spread name (bullish vs bull). |
-| Straddles & Strangles | 5 | 80% | 2 | Strangle breakevens perfect. Earnings straddle IV environment right direction — missed vol crush nuance for earnings context. Delta-neutral/gamma distinction still needs reinforcement. Scenario incomplete. |
+| Straddles & Strangles | 5 | 85% | 3 | Scenario complete. Breakevens solid. Vol crush understood after explanation. Implied move concept (straddle price = expected move) needed explanation but landed well. Straddle vs strangle tradeoff — got structure, needed coaching on cost/breakeven tradeoff. |
 | Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
 | Calendars & Diagonals | 5 | 0% | 0 | Not yet started |
 | Covered Calls & CSPs | 5 | 0% | 0 | Not yet started |
@@ -168,3 +168,10 @@ Total Questions Answered: 112
 - Correct / Partial / Incorrect: 1 / 1 / 0
 - Key gaps identified: Strangle breakevens clean. Earnings straddle IV environment — right direction (low IV = buy), missed the vol crush post-earnings nuance and the implied move concept ($11.50 = expected move threshold).
 - Notes: Scenario still incomplete. Next session: finish earnings straddle scenario, then complete the topic with risk management and when to use straddles vs strangles.
+
+### 2026-06-10 — Session 19 (Straddles & Strangles — complete + Iron Condor intro)
+- Topics covered: Earnings straddle scenario finish, vol crush, implied move, straddle vs strangle tradeoff, Iron Condor introduction (no quiz)
+- Questions asked: 3
+- Correct / Partial / Incorrect: 1 / 2 / 0
+- Key gaps identified: Implied move concept (straddle price = precise expected move threshold) needed explanation. Strangle tradeoff — identified structural difference but needed coaching on cost vs breakeven implications.
+- Notes: Straddles & Strangles topic complete. Iron Condor introduced conceptually — next session start quizzing on structure, max profit/loss, and when to use it.
