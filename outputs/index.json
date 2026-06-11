@@ -1,0 +1,127 @@
+{
+  "version": "1.0",
+  "last_sync": "2026-06-11T12:00:00Z",
+  "entries": [
+    {
+      "id": "bootstrap-001",
+      "date": "2026-06-11",
+      "skill": "options-coach",
+      "type": "docx",
+      "file": "skills/options-coach/outputs/Options-Study-Guide.docx",
+      "summary": "Options Study Guide — 13 pages covering Basics, Greeks, Volatility, Rev Cons, Strategies, Risk, and 4 trade scenarios",
+      "size_bytes": 43544,
+      "verified": true,
+      "timestamp": "2026-06-11T00:00:00Z"
+    },
+    {
+      "id": "bootstrap-002",
+      "date": "2026-06-11",
+      "skill": "build-doc",
+      "type": "html",
+      "file": "skills/Builds/htmls/doom-scroll-dashboard.html",
+      "summary": "Doom Scroll Dashboard — research-based HTML dashboard on short-form video and dopamine impact",
+      "verified": true,
+      "timestamp": "2026-06-11T00:00:00Z"
+    },
+    {
+      "id": "bootstrap-003",
+      "date": "2026-06-11",
+      "skill": "build-doc",
+      "type": "html",
+      "file": "skills/Builds/htmls/options-presentation.html",
+      "summary": "Options Presentation — Trader's Codex design-forward HTML covering Basics, Greeks, and Volatility",
+      "verified": true,
+      "timestamp": "2026-06-11T00:00:00Z"
+    },
+    {
+      "id": "bootstrap-004",
+      "date": "2026-06-11",
+      "skill": "docx",
+      "type": "docx",
+      "file": "skills/docx/outputs/test.docx",
+      "summary": "Test Word document (moved from docx root during vault bootstrap)",
+      "verified": true,
+      "timestamp": "2026-06-11T00:00:00Z"
+    },
+    {
+      "id": "website-model-001",
+      "date": "2026-06-11",
+      "skill": "website model/app-interviewer",
+      "type": "skill",
+      "file": "skills/website model/app-interviewer/SKILL.md",
+      "summary": "App Interviewer — adaptive interview that captures app requirements and writes spec.json",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-002",
+      "date": "2026-06-11",
+      "skill": "website model/app-architect",
+      "type": "skill",
+      "file": "skills/website model/app-architect/SKILL.md",
+      "summary": "App Architect — transforms spec.json into full technical blueprint.json (schema, routes, components)",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-003",
+      "date": "2026-06-11",
+      "skill": "website model/crud-builder",
+      "type": "skill",
+      "file": "skills/website model/crud-builder/SKILL.md",
+      "summary": "CRUD Builder — generates 4 CRUD pages per entity + shared JS/CSS from blueprint.json",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-004",
+      "date": "2026-06-11",
+      "skill": "website model/app-deployer",
+      "type": "skill",
+      "file": "skills/website model/app-deployer/SKILL.md",
+      "summary": "App Deployer — validates env vars, writes vercel.json, deploys to Vercel, returns live URL",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-005",
+      "date": "2026-06-11",
+      "skill": "website model/auth-integrator",
+      "type": "skill",
+      "file": "skills/website model/auth-integrator/SKILL.md",
+      "summary": "Auth Integrator — adds Supabase auth pages, RBAC guard, and RLS SQL to generated app",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-006",
+      "date": "2026-06-11",
+      "skill": "website model/dashboard-builder",
+      "type": "skill",
+      "file": "skills/website model/dashboard-builder/SKILL.md",
+      "summary": "Dashboard Builder — generates KPI cards, charts, and summary tables from blueprint schema",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-007",
+      "date": "2026-06-11",
+      "skill": "website model/form-builder",
+      "type": "skill",
+      "file": "skills/website model/form-builder/SKILL.md",
+      "summary": "Form Builder — generates multi-step wizard forms with conditionals, validation, and Supabase submission",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    },
+    {
+      "id": "website-model-008",
+      "date": "2026-06-11",
+      "skill": "website model/app-iterator",
+      "type": "skill",
+      "file": "skills/website model/app-iterator/SKILL.md",
+      "summary": "App Iterator — applies change requests to existing apps: updates blueprint, regenerates pages, logs to CHANGELOG.md",
+      "verified": true,
+      "timestamp": "2026-06-11T12:00:00Z"
+    }
+  ]
+}

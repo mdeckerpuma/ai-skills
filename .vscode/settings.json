@@ -1,0 +1,18 @@
+{
+  "claudeCode.preferredLocation": "panel",
+  "files.exclude": {
+    "**/.git": true,
+    "**/node_modules": true
+  },
+  "files.associations": {
+    "*.md": "markdown",
+    "SKILL.md": "markdown",
+    "CLAUDE.md": "markdown",
+    "MEMORY.md": "markdown"
+  },
+  "editor.wordWrap": "on",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "SKILL.md": "outputs"
+  }
+}

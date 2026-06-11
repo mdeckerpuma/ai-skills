@@ -1,0 +1,8 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\mdecker\\\\.claude\\\\skills\" -Directory | ForEach-Object { Write-Host \"$\\($_.Name\\) folder\" })",
+      "PowerShell(Get-ChildItem \"C:\\\\Users\\\\mdecker\\\\.vscode\" -Force -ErrorAction SilentlyContinue | Select-Object FullName, @{Label=\"Size\";Expression={if \\($_.PSIsContainer\\) { \"DIR\" } else { $_.Length }}} | Sort-Object FullName)"
+    ]
+  }
+}

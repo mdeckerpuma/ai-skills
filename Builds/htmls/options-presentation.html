@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Options — The Trader's Codex</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400&family=IBM+Plex+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:   #0c0b09;
+  --bg2:  #131109;
+  --bg3:  #1a1710;
+  --bg4:  #221f16;
+  --gold:       #c8a84b;
+  --gold-bright:#e8c96a;
+  --gold-dim:   rgba(200,168,75,0.10);
+  --gold-glow:  rgba(200,168,75,0.22);
+  --cream:      #ede5d5;
+  --cream-dim:  #9a9080;
+  --green:      #4a9e6e;
+  --red:        #b84040;
+  --red-dim:    rgba(184,64,64,0.14);
+  --green-dim:  rgba(74,158,110,0.14);
+  --border:     rgba(200,168,75,0.09);
+  --border-h:   rgba(200,168,75,0.28);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--bg);
+  color:var(--cream);
+  font-family:'Outfit',sans-serif;
+  font-weight:300;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+
+/* ── HEADER ── */
+.site-header{
+  padding:48px 64px 0;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  border-bottom:1px solid var(--border);
+}
+.header-eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);opacity:.7;margin-bottom:8px;
+}
+.header-title{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(36px,5vw,64px);
+  font-weight:300;letter-spacing:-1px;line-height:1;
+  margin-bottom:20px;
+}
+.header-title em{font-style:italic;color:var(--gold);}
+.header-right{text-align:right;padding-bottom:20px;}
+
+/* ── STATS BAR ── */
+.stats-bar{
+  display:flex;
+  border-bottom:1px solid var(--border);
+  background:var(--bg2);
+}
+.stat-ticker{
+  flex:1;padding:20px 28px;
+  border-right:1px solid var(--border);
+  position:relative;overflow:hidden;
+  transition:background .2s;
+}
+.stat-ticker:last-child{border-right:none;}
+.stat-ticker:hover{background:var(--bg3);}
+.stat-ticker::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;
+  height:2px;
+  background:linear-gradient(90deg,transparent,var(--gold),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.stat-ticker:hover::after{opacity:1;}
+.ticker-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cream-dim);margin-bottom:6px;
+}
+.ticker-value{
+  font-family:'Cormorant Garamond',serif;
+  font-size:34px;font-weight:600;
+  color:var(--gold-bright);line-height:1;
+}
+.ticker-sub{
+  font-size:11px;color:var(--cream-dim);margin-top:4px;
+  font-family:'IBM Plex Mono',monospace;
+}
+
+/* ── TABS ── */
+.tab-nav{
+  display:flex;padding:0 64px;
+  background:var(--bg);
+  border-bottom:1px solid var(--border);
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+}
+.tab-btn{
+  padding:20px 28px;
+  font-family:'Outfit',sans-serif;
+  font-size:12px;font-weight:500;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cream-dim);background:none;border:none;cursor:pointer;
+  position:relative;transition:color .25s;
+}
+.tab-btn::after{
+  content:'';position:absolute;
+  bottom:-1px;left:0;right:0;height:2px;
+  background:var(--gold);
+  transform:scaleX(0);transition:transform .3s ease;
+}
+.tab-btn:hover{color:var(--cream);}
+.tab-btn.active{color:var(--gold);}
+.tab-btn.active::after{transform:scaleX(1);}
+
+/* ── PANELS ── */
+.tab-panel{display:none;padding:64px;animation:fadeIn .3s ease;}
+.tab-panel.active{display:block;}
+@keyframes fadeIn{
+  from{opacity:0;transform:translateY(6px);}
+  to  {opacity:1;transform:translateY(0);}
+}
+
+/* ── TYPOGRAPHY HELPERS ── */
+.eyebrow{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:4px;text-transform:uppercase;
+  color:var(--gold);opacity:.6;margin-bottom:12px;
+}
+.heading{
+  font-family:'Cormorant Garamond',serif;
+  font-size:clamp(26px,3vw,42px);font-weight:300;line-height:1.1;margin-bottom:8px;
+}
+.heading em{font-style:italic;color:var(--gold);}
+.sub{
+  font-size:14px;color:var(--cream-dim);font-weight:300;
+  margin-bottom:44px;max-width:620px;line-height:1.8;
+}
+
+/* ── CARD ── */
+.card{
+  background:var(--bg3);border:1px solid var(--border);
+  border-radius:2px;padding:32px;
+  position:relative;overflow:hidden;
+  transition:border-color .3s,box-shadow .3s;
+}
+.card:hover{border-color:var(--border-h);box-shadow:0 0 28px rgba(200,168,75,.05);}
+.card-label{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;letter-spacing:3px;text-transform:uppercase;
+  color:var(--gold);opacity:.7;margin-bottom:10px;
+}
+.card-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:10px;}
+.card-body{font-size:13px;color:var(--cream-dim);line-height:1.8;}
+.card-body strong{color:var(--cream);font-weight:500;}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+@media(max-width:1024px){.g2,.g3{grid-template-columns:1fr;} .tab-panel{padding:40px 28px;} .site-header{padding:32px 28px 0;} .tab-nav{padding:0 28px;} .stats-bar{flex-wrap:wrap;} .stat-ticker{min-width:50%;}}
+@media(max-width:600px){.stat-ticker{min-width:100%;}}
+
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:13px;}
+.dt th{
+  font-family:'IBM Plex Mono',monospace;
+  font-size:9px;letter-spacing:2px;text-transform:uppercase;
+  color:var(--cream-dim);padding:12px 16px;text-align:left;
+  border-bottom:1px solid var(--border);font-weight:400;
+}
+.dt td{
+  padding:13px 16px;
+  border-bottom:1px solid rgba(200,168,75,.05);
+  color:var(--cream-dim);line-height:1.5;vertical-align:top;
+}
+.dt tr:last-child td{border-bottom:none;}
+.dt tr:hover td{background:var(--gold-dim);}
+.dt .k{color:var(--cream);font-weight:500;}
+
+/* ── FORMULA ── */
+.formula{
+  font-family:'IBM Plex Mono',monospace;font-size:13px;
+  background:var(--bg4);
+  border:1px solid var(--border);border-left:3px solid var(--gold);
+  padding:16px 20px;margin:12px 0;
+  color:var(--gold-bright);border-radius:0 2px 2px 0;line-height:1.7;
+}
+.formula .c{color:var(--cream-dim);font-size:11px;}
+
+/* ── TAGS ── */
+.tag{
+  display:inline-block;
+  font-family:'IBM Plex Mono',monospace;
+  font-size:10px;letter-spacing:1px;text-transform:uppercase;
+  padding:2px 7px;border-radius:2px;margin:1px 3px 1px 0;
+}
+.tb{background:var(--green-dim);color:var(--green);border:1px solid rgba(74,158,110,.28);}
+.ts{background:var(--red-dim);color:var(--red);border:1px solid rgba(184,64,64,.28);}
+.tn{background:var(--gold-dim);color:var(--gold);border:1px solid rgba(200,168,75,.22);}
+
+/* ── MONEYNESS BAR ── */
+.mbar{display:grid;grid-template-columns:1fr 1fr 1fr;border:1px solid var(--border);margin:28px 0;}
+.mzone{padding:24px 20px;border-right:1px solid var(--border);}
+.mzone:last-child{border-right:none;}
+.mzone.atm{background:var(--gold-dim);}
+.mzone-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;margin-bottom:7px;}
+.mzone.itm .mzone-lbl{color:var(--green);}
+.mzone.atm .mzone-lbl{color:var(--gold);}
+.mzone.otm .mzone-lbl{color:var(--cream-dim);}
+.mzone-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:600;margin-bottom:10px;}
+.mzone-body{font-size:13px;color:var(--cream-dim);line-height:1.6;}
+.mzone-body strong{color:var(--cream);}
+
+/* ── GREEK CARDS ── */
+.gcard{
+  background:var(--bg3);border:1px solid var(--border);
+  padding:36px;position:relative;overflow:hidden;
+  transition:border-color .3s,transform .2s;
+}
+.gcard:hover{border-color:var(--border-h);transform:translateY(-2px);}
+.gwm{
+  position:absolute;right:-8px;bottom:-24px;
+  font-family:'Cormorant Garamond',serif;
+  font-size:160px;font-weight:700;font-style:italic;
+  color:var(--gold);opacity:.04;line-height:1;
+  pointer-events:none;user-select:none;
+}
+.gsym{
+  font-family:'Cormorant Garamond',serif;
+  font-size:46px;font-weight:700;font-style:italic;
+  color:var(--gold);line-height:1;margin-bottom:6px;
+}
+.gname{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--cream-dim);margin-bottom:14px;}
+.gmeasure{font-size:14px;font-weight:500;margin-bottom:10px;color:var(--cream);line-height:1.4;}
+.gdesc{font-size:13px;color:var(--cream-dim);line-height:1.8;margin-bottom:14px;}
+.gdesc strong{color:var(--cream);}
+.gex{
+  font-family:'IBM Plex Mono',monospace;font-size:11px;
+  background:var(--bg4);border-left:2px solid var(--gold);
+  padding:10px 14px;color:var(--cream-dim);line-height:1.7;
+}
+.gex .hl{color:var(--gold-bright);}
+
+/* ── IVR SCALE ── */
+.ivr-scale{display:grid;grid-template-columns:3fr 3fr 4fr;gap:2px;margin:28px 0;overflow:hidden;}
+.ivr-zone{padding:22px 20px;text-align:center;}
+.ivr-zone.low {background:rgba(74,158,110,.1); border:1px solid rgba(74,158,110,.18);}
+.ivr-zone.mid {background:rgba(200,168,75,.07);border:1px solid rgba(200,168,75,.14);}
+.ivr-zone.high{background:rgba(184,64,64,.1);  border:1px solid rgba(184,64,64,.18);}
+.ivr-range{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:700;line-height:1;margin-bottom:5px;}
+.ivr-zone.low  .ivr-range{color:var(--green);}
+.ivr-zone.mid  .ivr-range{color:var(--gold);}
+.ivr-zone.high .ivr-range{color:var(--red);}
+.ivr-action{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;margin-bottom:7px;}
+.ivr-zone.low  .ivr-action{color:var(--green);}
+.ivr-zone.mid  .ivr-action{color:var(--gold);}
+.ivr-zone.high .ivr-action{color:var(--red);}
+.ivr-detail{font-size:12px;color:var(--cream-dim);line-height:1.55;}
+
+/* ── SCENARIO ── */
+.scenario{background:var(--bg2);border:1px solid var(--border);padding:32px;margin:28px 0;}
+.scenario-hdr{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:16px;}
+.sgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px;margin-bottom:16px;}
+.si-lbl{font-family:'IBM Plex Mono',monospace;font-size:9px;letter-spacing:2px;text-transform:uppercase;color:var(--cream-dim);margin-bottom:3px;}
+.si-val{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:var(--cream);}
+.si-val.d{color:var(--red);} .si-val.p{color:var(--green);} .si-val.n{color:var(--gold);}
+.slessn{font-size:13px;color:var(--cream-dim);line-height:1.8;padding-top:16px;border-top:1px solid var(--border);}
+.slessn strong{color:var(--cream);}
+
+/* ── DIVIDER ── */
+.div{height:1px;background:linear-gradient(90deg,transparent,var(--border-h),transparent);margin:52px 0;}
+
+/* ── CORNER ── */
+.corner{
+  position:fixed;top:20px;right:20px;
+  font-family:'IBM Plex Mono',monospace;font-size:9px;
+  color:rgba(200,168,75,.18);letter-spacing:2px;
+  writing-mode:vertical-rl;
+}
+
+/* ── FOOTER ── */
+footer{
+  border-top:1px solid var(--border);
+  padding:28px 64px;
+  display:flex;justify-content:space-between;align-items:center;
+  background:var(--bg2);
+}
+.fbrand{font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;color:var(--gold);opacity:.55;}
+.fnote{font-family:'IBM Plex Mono',monospace;font-size:9px;color:rgba(200,168,75,.2);letter-spacing:1px;}
+</style>
+</head>
+<body>
+
+<div class="corner">TJY OPTIONS / 2026</div>
+
+<!-- HEADER -->
+<header class="site-header">
+  <div>
+    <div class="header-eyebrow">TJY Options — Reference Series</div>
+    <h1 class="header-title">The Trader's<br><em>Codex</em></h1>
+  </div>
+  <div class="header-right">
+    <div class="header-eyebrow" style="text-align:right;margin-bottom:4px;">A complete reference on</div>
+    <div style="font-family:'Cormorant Garamond',serif;font-size:16px;color:var(--cream-dim);font-style:italic;">Basics &bull; Greeks &bull; Volatility</div>
+  </div>
+</header>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-ticker">
+    <div class="ticker-label">Shares per Contract</div>
+    <div class="ticker-value"><span class="ctr" data-to="100">0</span></div>
+    <div class="ticker-sub">always, without exception</div>
+  </div>
+  <div class="stat-ticker">
+    <div class="ticker-label">ATM Delta (approx)</div>
+    <div class="ticker-value">0.<span class="ctr" data-to="50">0</span></div>
+    <div class="ticker-sub">≈ 50% chance of finishing ITM</div>
+  </div>
+  <div class="stat-ticker">
+    <div class="ticker-label">Sweet-Spot DTE</div>
+    <div class="ticker-value"><span class="ctr" data-to="30">0</span>–<span class="ctr" data-to="45">0</span></div>
+    <div class="ticker-sub">days to expiry for sellers</div>
+  </div>
+  <div class="stat-ticker">
+    <div class="ticker-label">Profit Target</div>
+    <div class="ticker-value"><span class="ctr" data-to="50">0</span>%</div>
+    <div class="ticker-sub">of max credit — then close</div>
+  </div>
+  <div class="stat-ticker">
+    <div class="ticker-label">Daily Move (1 SD)</div>
+    <div class="ticker-value" style="font-size:20px;padding-top:6px;">S &times; IV ÷ 16</div>
+    <div class="ticker-sub">quick formula, any stock</div>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<nav class="tab-nav">
+  <button class="tab-btn active" onclick="go('basics',this)">I &mdash; Basics</button>
+  <button class="tab-btn" onclick="go('greeks',this)">II &mdash; The Greeks</button>
+  <button class="tab-btn" onclick="go('vol',this)">III &mdash; Volatility</button>
+</nav>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 1 — BASICS
+══════════════════════════════════════════════════════ -->
+<div id="tab-basics" class="tab-panel active">
+
+  <div class="eyebrow">Chapter I</div>
+  <h2 class="heading">Calls, Puts &amp; <em>the Contract</em></h2>
+  <p class="sub">Every option gives one party a right and saddles the other with an obligation. The premium is the price of that right. Master this asymmetry first — everything else is built on top of it.</p>
+
+  <!-- 4 Roles -->
+  <div class="card" style="margin-bottom:20px;">
+    <div class="card-label">The Four Roles — Rights vs Obligations</div>
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>Role</th><th>Right or Obligation</th><th>You Profit When</th><th>Max Profit</th><th>Max Loss</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="k"><span class="tag tb">Long</span> Call</td>
+          <td>RIGHT to <strong>buy</strong> 100 shares at the strike</td>
+          <td>Stock rises above strike + premium paid</td>
+          <td style="color:var(--green)">Unlimited</td>
+          <td>Premium paid — nothing more</td>
+        </tr>
+        <tr>
+          <td class="k"><span class="tag ts">Short</span> Call</td>
+          <td>OBLIGATION to <strong>sell</strong> 100 shares at strike</td>
+          <td>Stock stays at or below strike</td>
+          <td>Premium received — nothing more</td>
+          <td style="color:var(--red)">Unlimited</td>
+        </tr>
+        <tr>
+          <td class="k"><span class="tag tb">Long</span> Put</td>
+          <td>RIGHT to <strong>sell</strong> 100 shares at the strike</td>
+          <td>Stock falls below strike minus premium</td>
+          <td style="color:var(--green)">Strike minus premium (stock to $0)</td>
+          <td>Premium paid — nothing more</td>
+        </tr>
+        <tr>
+          <td class="k"><span class="tag ts">Short</span> Put</td>
+          <td>OBLIGATION to <strong>buy</strong> 100 shares at strike</td>
+          <td>Stock stays at or above strike</td>
+          <td>Premium received — nothing more</td>
+          <td style="color:var(--red)">Strike minus premium</td>
+        </tr>
+      </tbody>
+    </table>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cream-dim);margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+      Buyers have limited loss and unlimited (or large) upside. Sellers have limited gain and unlimited (or large) downside. The premium compensates sellers for taking on the obligation.
+    </p>
+  </div>
+
+  <!-- Moneyness -->
+  <div class="eyebrow" style="margin-top:48px;">Moneyness</div>
+  <h3 class="heading" style="font-size:28px;">Where the strike sits <em>relative to the stock</em></h3>
+
+  <div class="mbar">
+    <div class="mzone itm">
+      <div class="mzone-lbl">In the Money</div>
+      <div class="mzone-title">ITM</div>
+      <div class="mzone-body">
+        <strong>Call ITM:</strong> strike below stock<br>
+        <strong>Put ITM:</strong> strike above stock<br><br>
+        Has <strong>intrinsic value</strong>. Delta near 1.00 (call) or −1.00 (put). Behaves like owning the stock. Most expensive — least extrinsic risk.
+      </div>
+    </div>
+    <div class="mzone atm">
+      <div class="mzone-lbl">At the Money</div>
+      <div class="mzone-title">ATM</div>
+      <div class="mzone-body">
+        Strike price <strong>equals</strong> stock price.<br><br>
+        Zero intrinsic — all premium is extrinsic. Delta ≈ 0.50. <strong>Highest theta decay</strong> and highest vega sensitivity. Where sellers focus.
+      </div>
+    </div>
+    <div class="mzone otm">
+      <div class="mzone-lbl">Out of the Money</div>
+      <div class="mzone-title">OTM</div>
+      <div class="mzone-body">
+        <strong>Call OTM:</strong> strike above stock<br>
+        <strong>Put OTM:</strong> strike below stock<br><br>
+        No intrinsic value. Cheaper to buy. Delta near 0. Used for wings on condors and credit spreads.
+      </div>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Intrinsic vs Extrinsic -->
+  <div class="g2">
+    <div>
+      <div class="eyebrow">Value Anatomy</div>
+      <h3 class="heading" style="font-size:28px;">Intrinsic vs <em>Extrinsic</em></h3>
+      <p style="font-size:13px;color:var(--cream-dim);line-height:1.8;margin-bottom:20px;">Every premium is two things. Only extrinsic decays — theta eats it daily. Only extrinsic collapses when IV falls. Intrinsic is permanent until exercise or expiration.</p>
+      <div class="formula">
+        Call Intrinsic = max(0, Stock − Strike)<br>
+        Put Intrinsic  = max(0, Strike − Stock)<br>
+        <span class="c">──────────────────────────────</span><br>
+        Extrinsic = Total Premium − Intrinsic<br>
+        <span class="c">// extrinsic is eaten by theta every day</span><br>
+        <span class="c">// extrinsic collapses when IV falls</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Example — SPY at $522</div>
+      <table class="dt">
+        <thead><tr><th>Option</th><th>Premium</th><th>Intrinsic</th><th>Extrinsic</th></tr></thead>
+        <tbody>
+          <tr><td class="k">520 Call (ITM)</td><td>$4.80</td><td style="color:var(--green)">$2.00</td><td style="color:var(--gold)">$2.80</td></tr>
+          <tr><td class="k">522 Call (ATM)</td><td>$6.20</td><td>$0.00</td><td style="color:var(--gold)">$6.20</td></tr>
+          <tr><td class="k">525 Call (OTM)</td><td>$3.10</td><td>$0.00</td><td style="color:var(--gold)">$3.10</td></tr>
+          <tr><td class="k">525 Put (ITM)</td><td>$5.40</td><td style="color:var(--green)">$3.00</td><td style="color:var(--gold)">$2.40</td></tr>
+        </tbody>
+      </table>
+      <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cream-dim);margin-top:14px;">The ATM call has the most extrinsic — $6.20 of pure time value at risk.</p>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Breakevens -->
+  <div class="eyebrow">Breakeven Formulas</div>
+  <h3 class="heading" style="font-size:28px;margin-bottom:24px;">Where you need the stock <em>at expiration</em></h3>
+  <div class="g2">
+    <div class="formula" style="font-size:13px;">Long Call BE = Strike + Premium Paid<br><span class="c">// 520 call for $4.00 → BE = $524.00</span></div>
+    <div class="formula" style="font-size:13px;">Long Put BE = Strike − Premium Paid<br><span class="c">// 520 put for $3.50 → BE = $516.50</span></div>
+    <div class="formula" style="font-size:13px;">Short Put BE = Strike − Premium Received<br><span class="c">// Sold 515 put for $2.00 → BE = $513.00</span></div>
+    <div class="formula" style="font-size:13px;">Straddle BEs = Strike ± Total Premium<br><span class="c">// Sold 520 straddle for $9 → $511 / $529</span></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 2 — GREEKS
+══════════════════════════════════════════════════════ -->
+<div id="tab-greeks" class="tab-panel">
+
+  <div class="eyebrow">Chapter II</div>
+  <h2 class="heading">The Greeks — <em>Measuring Risk</em></h2>
+  <p class="sub">Greeks answer one question at a time: if only this one thing changes, how does my option's price move? In practice all of them shift simultaneously — understanding how they interact is the real edge.</p>
+
+  <div class="g2">
+
+    <!-- DELTA -->
+    <div class="gcard">
+      <div class="gwm">Δ</div>
+      <div class="gsym">Δ</div>
+      <div class="gname">Delta</div>
+      <div class="gmeasure">Dollar change per $1 move in the stock</div>
+      <div class="gdesc">
+        Delta is your directional exposure. A 0.45Δ call gains approximately <strong>$0.45 per $1</strong> the stock rises (per share — multiply by 100 for a contract). Delta also approximates the probability the option finishes in the money.
+        <br><br>
+        <span class="tag tb">Long</span> positive Δ (calls) or negative Δ (puts)<br>
+        <span class="tag ts">Short</span> opposite sign
+      </div>
+      <div class="gex">
+        SPY at 520. Own a 0.45Δ call.<br>
+        SPY → 521: option gains ~<span class="hl">$0.45 × 100 = $45</span><br>
+        Deep ITM (Δ≈1.00) = dollar-for-dollar with stock<br>
+        ATM (Δ≈0.50) = 50¢ per $1 move<br>
+        Far OTM (Δ≈0.05) = barely moves
+      </div>
+    </div>
+
+    <!-- GAMMA -->
+    <div class="gcard">
+      <div class="gwm">Γ</div>
+      <div class="gsym">Γ</div>
+      <div class="gname">Gamma</div>
+      <div class="gmeasure">How fast delta changes per $1 stock move</div>
+      <div class="gdesc">
+        Gamma explains why delta does not stay still. <strong>Long options → positive gamma</strong> — each favorable move increases your delta, so you earn more on the next move. <strong>Short options → negative gamma</strong> — each adverse move increases how much delta works against you.
+        <br><br>
+        Gamma peaks ATM and explodes near expiration. Short ATM positions with under 7 DTE carry the most dangerous gamma exposure in options.
+      </div>
+      <div class="gex">
+        Sell straddle: Δ≈0, Γ≈−0.08<br>
+        SPY falls $1 → delta becomes <span class="hl">+0.08</span><br>
+        SPY falls $1 more → delta becomes <span class="hl">+0.16</span><br>
+        Each move accelerates the loss. This is <span class="hl">gamma risk</span>.
+      </div>
+    </div>
+
+    <!-- THETA -->
+    <div class="gcard">
+      <div class="gwm">Θ</div>
+      <div class="gsym">Θ</div>
+      <div class="gname">Theta</div>
+      <div class="gmeasure">Dollar gained or lost per calendar day</div>
+      <div class="gdesc">
+        Theta is the daily erosion of extrinsic value. Only extrinsic decays — not intrinsic. Theta <strong>accelerates in the final 30 days</strong> non-linearly. This is why premium sellers target the 30–45 DTE window: fast decay, enough time to adjust if wrong.
+        <br><br>
+        <span class="tag tb">Buyers</span> pay theta — time costs you daily<br>
+        <span class="tag ts">Sellers</span> earn theta — time works for you
+      </div>
+      <div class="gex">
+        ATM option at 45 DTE: Θ = −$8/day<br>
+        Same option at 7 DTE:  Θ = −$22/day<br>
+        Decay <span class="hl">nearly triples</span> in the final week.<br>
+        Sellers love 30–45 DTE. Buyers fear it.
+      </div>
+    </div>
+
+    <!-- VEGA -->
+    <div class="gcard">
+      <div class="gwm">V</div>
+      <div class="gsym">ν</div>
+      <div class="gname">Vega</div>
+      <div class="gmeasure">Dollar change per 1% move in implied volatility</div>
+      <div class="gdesc">
+        Vega is the tension at the core of every options trade. <strong>Theta and Vega directly oppose each other.</strong> You cannot earn from time passing AND benefit from rising volatility at the same time. Choose a side — and choose based on IVR.
+        <br><br>
+        <span class="tag tb">Buyers</span> long vega — rising IV helps you<br>
+        <span class="tag ts">Sellers</span> short vega — rising IV hurts you
+      </div>
+      <div class="gex">
+        Short straddle: Θ=+$14/day, ν=−$80 per 1% IV<br>
+        10 days pass → theta earns <span class="hl">+$140</span><br>
+        IV spikes +6% → vega costs <span class="hl">−$480</span><br>
+        Net P&amp;L: <span class="hl" style="color:var(--red)">−$340</span> despite 10 days of theta
+      </div>
+    </div>
+
+  </div>
+
+  <div class="div"></div>
+
+  <div class="eyebrow">Greeks at a Glance</div>
+  <h3 class="heading" style="font-size:28px;margin-bottom:24px;">All four, <em>side by side</em></h3>
+
+  <div class="card">
+    <table class="dt">
+      <thead>
+        <tr><th>Greek</th><th>Measures</th><th>Long (buyer)</th><th>Short (seller)</th><th>Peaks when</th><th>Key interaction</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="k">Δ Delta</td>
+          <td>Directional exposure</td>
+          <td>+0→+1 calls / −1→0 puts</td>
+          <td>Opposite sign</td>
+          <td>Deep ITM</td>
+          <td>Gamma changes delta on every move</td>
+        </tr>
+        <tr>
+          <td class="k">Γ Gamma</td>
+          <td>Rate of delta change</td>
+          <td style="color:var(--green)">Positive — accelerates gains</td>
+          <td style="color:var(--red)">Negative — accelerates losses</td>
+          <td>ATM, near expiry</td>
+          <td>Amplifies theta pain near expiry</td>
+        </tr>
+        <tr>
+          <td class="k">Θ Theta</td>
+          <td>Daily time decay (extrinsic)</td>
+          <td style="color:var(--red)">Negative — pay daily</td>
+          <td style="color:var(--green)">Positive — earn daily</td>
+          <td>ATM, last 30 DTE</td>
+          <td>Directly opposed to Vega</td>
+        </tr>
+        <tr>
+          <td class="k">ν Vega</td>
+          <td>IV sensitivity</td>
+          <td style="color:var(--green)">Positive — rising IV helps</td>
+          <td style="color:var(--red)">Negative — rising IV hurts</td>
+          <td>Events: earnings, FOMC</td>
+          <td>Directly opposed to Theta</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════════
+     TAB 3 — VOLATILITY
+══════════════════════════════════════════════════════ -->
+<div id="tab-vol" class="tab-panel">
+
+  <div class="eyebrow">Chapter III</div>
+  <h2 class="heading">Volatility — <em>The Pricing Engine</em></h2>
+  <p class="sub">Volatility is the most important pricing input after the stock price itself. Two traders can look at the same option and reach completely different conclusions about its value — depending on where they think volatility goes from here.</p>
+
+  <div class="g2" style="margin-bottom:44px;">
+    <div class="card">
+      <div class="card-label">Implied Volatility (IV)</div>
+      <div class="card-title" style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:20px;">What the market <em>expects</em></div>
+      <div class="card-body">
+        IV is back-solved from current option prices — a forward-looking expectation, not a fact. High IV means the market fears large moves and options are expensive. Low IV means calm is expected and options are cheap.
+        <br><br>
+        <strong>High IV</strong> = expensive options = edge for sellers<br>
+        <strong>Low IV</strong> = cheap options = edge for buyers
+      </div>
+      <div class="formula" style="margin-top:16px;">
+        Daily Expected Move (1 SD) = S &times; IV% &divide; 16<br>
+        <span class="c">// SPY 520, IV 16%: 520 &times; 0.16 &divide; 16 = $5.20/day</span><br>
+        <span class="c">// 68% of days stay within &plusmn;$5.20</span>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-label">Historical Volatility (HV)</div>
+      <div class="card-title" style="font-family:'Cormorant Garamond',serif;font-weight:300;font-size:20px;">What the stock <em>actually moved</em></div>
+      <div class="card-body">
+        HV measures realized price movement over the past 20–30 days. It is a backward-looking fact. The spread between IV and HV reveals structural mispricing.
+        <br><br>
+        <strong>IV &gt; HV significantly</strong> = options overpriced for actual moves → sell<br>
+        <strong>IV &lt; HV significantly</strong> = options cheap for actual moves → buy
+      </div>
+      <div class="formula" style="margin-top:16px;">
+        Edge Signal: IV vs HV spread<br>
+        <span class="c">// IV=30%, HV=14% → overpriced → sell premium</span><br>
+        <span class="c">// IV=14%, HV=28% → cheap → buy premium</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- IVR -->
+  <div class="eyebrow">IV Rank — IVR</div>
+  <h3 class="heading" style="font-size:28px;margin-bottom:8px;">Is IV high or low <em>relative to itself?</em></h3>
+  <p style="font-size:13px;color:var(--cream-dim);line-height:1.7;margin-bottom:20px;max-width:620px;">
+    A stock with 40% IV could be cheap (if it normally runs at 70%) or expensive (if it normally sits at 15%). IVR puts current IV in context of its own 52-week range.
+  </p>
+  <div class="formula" style="display:inline-block;margin-bottom:24px;">
+    IVR = (Current IV − 52wk Low) &divide; (52wk High − 52wk Low) &times; 100
+  </div>
+
+  <div class="ivr-scale">
+    <div class="ivr-zone low">
+      <div class="ivr-range">0 – 30</div>
+      <div class="ivr-action">Buy Premium</div>
+      <div class="ivr-detail">IV is historically cheap. Favorable risk/reward for buyers. Use debit spreads, long calls/puts, straddles. Rising IV will help you (positive vega).</div>
+    </div>
+    <div class="ivr-zone mid">
+      <div class="ivr-range">30 – 60</div>
+      <div class="ivr-action">Follow the Trend</div>
+      <div class="ivr-detail">No structural vol edge. Trade directionally. Condors work with caution. No strong vol signal — let price action lead.</div>
+    </div>
+    <div class="ivr-zone high">
+      <div class="ivr-range">60 – 100</div>
+      <div class="ivr-action">Sell Premium</div>
+      <div class="ivr-detail">IV is elevated and likely to mean-revert. Credit spreads, condors, short straddles. Theta + falling IV = double benefit for sellers.</div>
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Vol Crush -->
+  <div class="eyebrow">The Vol Crush Trap</div>
+  <h3 class="heading" style="font-size:28px;margin-bottom:14px;">When being right <em>still loses</em></h3>
+  <p style="font-size:13px;color:var(--cream-dim);line-height:1.7;margin-bottom:22px;max-width:620px;">
+    The costliest misunderstanding in options. You correctly predict the direction of a move — and still lose — because the move was smaller than the market feared, and the uncertainty premium evaporates when the event resolves.
+  </p>
+
+  <div class="scenario">
+    <div class="scenario-hdr">// Scenario — AAPL Earnings Vol Crush</div>
+    <div class="sgrid">
+      <div><div class="si-lbl">Stock</div><div class="si-val">$195</div></div>
+      <div><div class="si-lbl">IV Before</div><div class="si-val n">72%</div></div>
+      <div><div class="si-lbl">IVR</div><div class="si-val d">94</div></div>
+      <div><div class="si-lbl">Trade</div><div class="si-val" style="font-size:16px;">Buy 195 Straddle</div></div>
+      <div><div class="si-lbl">Premium Paid</div><div class="si-val d">$12.00</div></div>
+      <div><div class="si-lbl">Breakevens</div><div class="si-val" style="font-size:16px;">$183 / $207</div></div>
+    </div>
+    <div class="sgrid" style="padding-top:16px;border-top:1px solid var(--border);">
+      <div><div class="si-lbl">AAPL Moves To</div><div class="si-val p">$202 (+$7)</div></div>
+      <div><div class="si-lbl">IV After</div><div class="si-val p">22% (−50pt)</div></div>
+      <div><div class="si-lbl">Straddle Now Worth</div><div class="si-val d">$6.20</div></div>
+      <div><div class="si-lbl">P&amp;L</div><div class="si-val d">−$5.80</div></div>
+    </div>
+    <div class="slessn">
+      The stock moved <strong>in the right direction by $7</strong>. You still lost $5.80. The $12 premium was priced for a potential $12+ swing <em>plus</em> the uncertainty premium of the event itself. Once earnings resolved, both the big-move fear and the uncertainty evaporated simultaneously. <strong>Vega destroyed more value than delta created.</strong> IVR = 94 before an event means sell the straddle — not buy it.
+    </div>
+  </div>
+
+  <div class="div"></div>
+
+  <!-- Strategy Matrix -->
+  <div class="eyebrow">Strategy Decision Matrix</div>
+  <h3 class="heading" style="font-size:28px;margin-bottom:24px;">IVR &rarr; Strategy &rarr; <em>Greek Profile</em></h3>
+
+  <div class="card">
+    <table class="dt">
+      <thead>
+        <tr><th>IVR</th><th>Outlook</th><th>Strategy</th><th>Theta</th><th>Vega</th><th>Defined Risk</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="tag tb">Low &lt;30</span></td><td>Bullish</td><td>Long call / Bull call debit spread</td><td style="color:var(--red)">Negative</td><td style="color:var(--green)">Positive</td><td>Yes</td></tr>
+        <tr><td><span class="tag tb">Low &lt;30</span></td><td>Bearish</td><td>Long put / Bear put debit spread</td><td style="color:var(--red)">Negative</td><td style="color:var(--green)">Positive</td><td>Yes</td></tr>
+        <tr><td><span class="tag tb">Low &lt;30</span></td><td>Neutral</td><td>Long straddle / strangle</td><td style="color:var(--red)">Negative</td><td style="color:var(--green)">Positive</td><td>Yes</td></tr>
+        <tr><td><span class="tag ts">High &gt;60</span></td><td>Bullish</td><td>Bull put credit spread</td><td style="color:var(--green)">Positive</td><td style="color:var(--red)">Negative</td><td>Yes</td></tr>
+        <tr><td><span class="tag ts">High &gt;60</span></td><td>Bearish</td><td>Bear call credit spread</td><td style="color:var(--green)">Positive</td><td style="color:var(--red)">Negative</td><td>Yes</td></tr>
+        <tr><td><span class="tag ts">High &gt;60</span></td><td>Neutral</td><td>Iron condor</td><td style="color:var(--green)">Positive</td><td style="color:var(--red)">Negative</td><td>Yes</td></tr>
+        <tr><td><span class="tag ts">High &gt;70</span></td><td>Neutral — pin</td><td>Short straddle / strangle</td><td style="color:var(--green)">Positive</td><td style="color:var(--red)">Negative</td><td style="color:var(--red)">No — undefined</td></tr>
+      </tbody>
+    </table>
+    <p style="font-family:'IBM Plex Mono',monospace;font-size:11px;color:var(--cream-dim);margin-top:14px;padding-top:14px;border-top:1px solid var(--border);">
+      Positive theta always pairs with negative vega. You cannot earn from both time passing AND rising volatility simultaneously. This is the fundamental trade-off of options.
+    </p>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="fbrand">The Trader's Codex</div>
+  <div class="fnote">TJY Options &mdash; Educational Reference &mdash; Not Financial Advice</div>
+</footer>
+
+<script>
+function go(name, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + name).classList.add('active');
+  btn.classList.add('active');
+  runCounters();
+}
+
+function runCounters() {
+  document.querySelectorAll('.ctr').forEach(el => {
+    const target = +el.dataset.to;
+    const t0 = performance.now();
+    const dur = 1100;
+    (function tick(now) {
+      const p = Math.min((now - t0) / dur, 1);
+      const ease = 1 - Math.pow(1 - p, 3);
+      el.textContent = Math.floor(ease * target);
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = target;
+    })(t0);
+  });
+}
+
+window.addEventListener('load', () => setTimeout(runCounters, 250));
+</script>
+</body>
+</html>
