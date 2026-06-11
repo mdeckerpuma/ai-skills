@@ -1,0 +1,177 @@
+# Options Trading Progress
+
+Last Updated: 2026-06-10
+Total Sessions: 19
+Total Questions Answered: 115
+
+## Topic Scores
+
+| Topic | Level | Score | Sessions | Notes |
+|-------|-------|-------|----------|-------|
+| Calls & Puts | 1 | 90% | 1 | Strong after drilling — fixed short put loss direction |
+| Intrinsic vs Extrinsic Value | 1 | 95% | 1 | Solid — named intrinsic value unprompted, correctly explained time value |
+| In/At/Out of the Money | 1 | 95% | 1 | Correct and confident |
+| Expiration & Exercise | 1 | 90% | 2 | Assignment direction locked in by session 2 |
+| Covered Calls & CSPs | 5 | 90% | 1 | Strong — P&L, assignment, breakeven, scenarios all correct. Instinctively mentioned volatility. |
+| Delta | 2 | 80% | 1 | Strong conceptual grasp. Recurring error: forgetting ×100 on position delta. Intuited gamma unprompted. |
+| Gamma | 2 | 88% | 1 | Strong — ATM/expiration risk, long/short gamma, pin risk all correct. ×100 habit locked in. |
+| Theta | 2 | 90% | 1 | Strong — decay calculation, long vs short theta, DTE impact, trade management all correct. Small P&L confusion early (fixed quickly). |
+| Vega | 2 | 92% | 1 | Excellent — vega/theta tradeoff, long/short vega, vol crush all correct. Near-perfect session. |
+| Rho | 2 | 95% | 1 | Excellent — nailed cost of carry logic unprompted. Strong conceptual thinker. |
+| Implied Volatility | 3 | 93% | 1 | Excellent — vol crush, IV mean reversion, buy vs sell environments, daily move calc all correct. |
+| Historical/Realized Volatility | 3 | 95% | 1 | Solid — IV vs HV comparison, volatility risk premium, seller edge all correct. |
+| IV Rank & IV Percentile | 3 | 88% | 1 | IVR calc correct. IVP concept needed explanation but understood quickly. Spike distortion concept solid. |
+| Volatility Skew | 3 | 85% | 1 | Strong — put skew, reverse skew, seller edge all correct. Instinctively described spread trades twice. Minor ATM vs OTM pricing confusion. |
+| VIX | 3 | 95% | 1 | Perfect — fear gauge, mean reversion, high/low VIX environments all correct. |
+| Vol Crush | 3 | 92% | 1 | Strong — seller edge, IV collapse mechanics, straddle context all correct. |
+| Reversals & Conversions | 4 | 95% | 1 | Excellent — delta neutral, arbitrage mechanics, rate sensitivity, hard-to-borrow carry all correct. Intuited stock lending use case unprompted. |
+| Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
+| Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
+| Vertical Spreads | 5 | 92% | 1 | Excellent — all four spread types, debit vs credit, IV environment selection, P&L all correct. Minor wording on spread name (bullish vs bull). |
+| Straddles & Strangles | 5 | 85% | 3 | Scenario complete. Breakevens solid. Vol crush understood after explanation. Implied move concept (straddle price = expected move) needed explanation but landed well. Straddle vs strangle tradeoff — got structure, needed coaching on cost/breakeven tradeoff. |
+| Iron Condors & Iron Butterflies | 5 | 0% | 0 | Not yet started |
+| Calendars & Diagonals | 5 | 0% | 0 | Not yet started |
+| Covered Calls & CSPs | 5 | 0% | 0 | Not yet started |
+| Position Sizing | 6 | 0% | 0 | Not yet started |
+| Rolling Positions | 6 | 0% | 0 | Not yet started |
+| Assignment Risk | 6 | 0% | 0 | Not yet started |
+
+## Weak Areas (prioritize these)
+- None currently — Delta ×100 habit locked in, Gamma strong
+
+## User Preferences
+- Deep in Level 5 strategies — Levels 1-4 complete
+
+## Session Log
+
+### 2026-06-05 — Session 1 (Calibration + Level 1 Drill)
+- Topics covered: Calls & Puts, Moneyness, Intrinsic vs Extrinsic Value, Expiration & Exercise
+- Questions asked: 8
+- Correct / Partial / Incorrect: 5 / 2 / 0
+- Key gaps identified: Short put loss direction (fixed by end of session); put assignment direction (buyer SELLS to you, you BUY stock); premium math double-counting error on loss calculation
+
+### 2026-06-05 — Session 2 (Level 1 Reinforcement + Covered Calls)
+- Topics covered: Covered calls, assignment direction, P&L, scenarios
+- Questions asked: 8
+- Correct / Partial / Incorrect: 7 / 1 / 0
+- Key gaps identified: Forgot to include premium in P&L once (self-corrected quickly). Instinctively mentioned volatility unprompted — good sign for Level 2 readiness.
+- Notes: Level 1 complete. Ready to begin Level 2 (Delta) next session.
+
+### 2026-06-05 — Session 3 (Delta)
+- Topics covered: Delta — direction, calculation, position delta, probability, hedging, gamma preview
+- Questions asked: 11
+- Correct / Partial / Incorrect: 8 / 3 / 0
+- Key gaps identified: Forgets to multiply by 100 when calculating position delta (happened twice). Conceptual understanding is strong — intuited gamma unprompted.
+- Notes: Ready for Gamma next session. Reinforce ×100 rule at start of next session.
+
+### 2026-06-05 — Session 4 (Gamma)
+- Topics covered: Gamma — delta acceleration, ATM sensitivity, long/short gamma, pin risk, earnings scenario
+- Questions asked: 9
+- Correct / Partial / Incorrect: 8 / 1 / 0
+- Key gaps identified: Slight imprecision on gamma risk near expiration (said "assets become volatile" vs. delta whipsawing at strike). Everything else clean.
+- Notes: ×100 habit locked in. Ready for Theta next session.
+
+### 2026-06-05 — Session 5 (Theta)
+- Topics covered: Theta — daily decay, long vs short theta, DTE impact, trade management scenarios
+- Questions asked: 8
+- Correct / Partial / Incorrect: 7 / 1 / 0
+- Key gaps identified: Brief confusion on P&L vs premium collected (clarified quickly). Trade management instincts are strong.
+- Notes: Ready for Vega next session.
+
+### 2026-06-05 — Session 6 (Vega)
+- Topics covered: Vega — IV sensitivity, long/short vega, DTE impact, vega vs theta tradeoff, vol crush scenario
+- Questions asked: 9
+- Correct / Partial / Incorrect: 8 / 1 / 0
+- Key gaps identified: Minor framing error (put "gained" vs "lost" value on IV drop — direction was correct). Otherwise clean.
+- Notes: Ready for Rho next session. Consider moving quickly through Rho (brief topic) then into Level 3 Volatility.
+
+### 2026-06-05 — Session 7 (Rho)
+- Topics covered: Rho — interest rate sensitivity, cost of carry, LEAPS relevance
+- Questions asked: 2
+- Correct / Partial / Incorrect: 2 / 0 / 0
+- Key gaps identified: None — unprompted cost of carry explanation was excellent.
+- Notes: Level 2 complete. Beginning Level 3 (Implied Volatility) next.
+
+### 2026-06-05 — Session 8 (Implied Volatility)
+- Topics covered: IV — definition, daily move calculation, high/low IV environments, vol crush, earnings scenarios
+- Questions asked: 8
+- Correct / Partial / Incorrect: 8 / 0 / 0
+- Key gaps identified: None — perfect session.
+- Notes: Ready for HV/RV next session.
+
+### 2026-06-05 — Session 9 (HV/RV + IV Rank intro)
+- Topics covered: Historical/Realized Volatility, volatility risk premium, IV Rank & IV Percentile (intro only)
+- Questions asked: 2
+- Correct / Partial / Incorrect: 2 / 0 / 0
+- Key gaps identified: None.
+- Notes: IVR/IVP introduced but not drilled — start here next session with the calculation question.
+
+### 2026-06-08 — Session 10 (IVR/IVP)
+- Topics covered: IV Rank calculation, IV Percentile, IVR vs IVP divergence, spike distortion
+- Questions asked: 4
+- Correct / Partial / Incorrect: 3 / 1 / 0
+- Key gaps identified: IVP concept needed refresher. Slight wording mix-up on spike distortion (said spike inflates IVP range — actually inflates IVR). Understood quickly after explanation.
+- Notes: Ready for Volatility Skew next.
+
+### 2026-06-08 — Session 11 (Volatility Skew)
+- Topics covered: Put skew, reverse skew, skew-based trading edge, spread intuition
+- Questions asked: 5
+- Correct / Partial / Incorrect: 4 / 1 / 0
+- Key gaps identified: Minor — described ATM put as cheaper than OTM for hedging (reversed). Instinctively described put spreads twice without being taught them — strong intuition.
+- Notes: Introduce vertical spreads earlier than planned (Level 5) since user keeps arriving at them naturally. Ready for VIX next.
+
+### 2026-06-08 — Session 12 (VIX + Vol Crush)
+- Topics covered: VIX levels, fear gauge mechanics, high/low VIX environments, vol crush, earnings straddle P&L
+- Questions asked: 6
+- Correct / Partial / Incorrect: 6 / 0 / 0
+- Key gaps identified: None — clean sweep.
+- Notes: Level 3 complete. Beginning Level 4 (Reversals & Conversions) next session.
+
+### 2026-06-08 — Session 13 (Reversals & Conversions)
+- Topics covered: Put-call parity, conversion/reversal legs, arbitrage mechanics, rate sensitivity, hard-to-borrow carry trade
+- Questions asked: 6
+- Correct / Partial / Incorrect: 6 / 0 / 0
+- Key gaps identified: None — perfect session. Intuited stock lending use case and delta-neutral nature unprompted.
+- Notes: Ready for Synthetic Positions next.
+
+### 2026-06-08 — Session 14 (Synthetic Positions)
+- Topics covered: Synthetic long/short stock, synthetic long call, covered call = synthetic short put
+- Questions asked: 5
+- Correct / Partial / Incorrect: 4 / 1 / 0
+- Key gaps identified: Confused covered call with synthetic long call — payoff check clarified it quickly. Underlying intuition is strong.
+- Notes: Ready for Box Spreads next.
+
+### 2026-06-08 — Session 15 (Box Spreads)
+- Topics covered: Box spread structure, fixed payout, risk-free profit, early assignment risk, American vs European style
+- Questions asked: 4
+- Correct / Partial / Incorrect: 4 / 0 / 0
+- Key gaps identified: None — perfect session.
+- Notes: Level 4 complete. Beginning Level 5 (Vertical Spreads) next.
+
+### 2026-06-08 — Session 16 (Vertical Spreads)
+- Topics covered: All four vertical spreads, debit vs credit, IV environment selection, earnings scenario
+- Questions asked: 9
+- Correct / Partial / Incorrect: 9 / 0 / 0
+- Key gaps identified: Minor — said "bullish put spread" instead of "bull put spread." Numbers and concepts perfect throughout.
+- Notes: Ready for Straddles & Strangles next.
+
+### 2026-06-09 — Session 17 (Straddles & Strangles — intro, cut short)
+- Topics covered: Straddle vs strangle structure, breakevens, short straddle max profit/loss, IV environment, Greeks
+- Questions asked: 6
+- Correct / Partial / Incorrect: 1 / 4 / 1
+- Key gaps identified: Initially described strangle structure when asked about straddle (corrected). IV environment had long/short backwards — key conceptual gap, corrected and understood well. Delta on long straddle: said "working for you" instead of delta-neutral; missed gamma as the key Greek for movement. Breakeven lower calc was careless arithmetic (user confirmed, not a concept gap).
+- Notes: Session cut short mid-scenario. Resume next session with: strangle breakeven comparison, scenario completion, then move to risk management and when to use each.
+
+### 2026-06-09 — Session 18 (Straddles & Strangles — continued, cut short)
+- Topics covered: Strangle breakevens, earnings straddle scenario (partial — IV environment question)
+- Questions asked: 2
+- Correct / Partial / Incorrect: 1 / 1 / 0
+- Key gaps identified: Strangle breakevens clean. Earnings straddle IV environment — right direction (low IV = buy), missed the vol crush post-earnings nuance and the implied move concept ($11.50 = expected move threshold).
+- Notes: Scenario still incomplete. Next session: finish earnings straddle scenario, then complete the topic with risk management and when to use straddles vs strangles.
+
+### 2026-06-10 — Session 19 (Straddles & Strangles — complete + Iron Condor intro)
+- Topics covered: Earnings straddle scenario finish, vol crush, implied move, straddle vs strangle tradeoff, Iron Condor introduction (no quiz)
+- Questions asked: 3
+- Correct / Partial / Incorrect: 1 / 2 / 0
+- Key gaps identified: Implied move concept (straddle price = precise expected move threshold) needed explanation. Strangle tradeoff — identified structural difference but needed coaching on cost vs breakeven implications.
+- Notes: Straddles & Strangles topic complete. Iron Condor introduced conceptually — next session start quizzing on structure, max profit/loss, and when to use it.
