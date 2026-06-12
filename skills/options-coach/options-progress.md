@@ -1,8 +1,8 @@
 # Options Trading Progress
 
-Last Updated: 2026-06-10
-Total Sessions: 19
-Total Questions Answered: 115
+Last Updated: 2026-06-12
+Total Sessions: 20
+Total Questions Answered: 155
 
 ## Topic Scores
 
@@ -13,19 +13,19 @@ Total Questions Answered: 115
 | In/At/Out of the Money | 1 | 95% | 1 | Correct and confident |
 | Expiration & Exercise | 1 | 90% | 2 | Assignment direction locked in by session 2 |
 | Covered Calls & CSPs | 5 | 90% | 1 | Strong — P&L, assignment, breakeven, scenarios all correct. Instinctively mentioned volatility. |
-| Delta | 2 | 80% | 1 | Strong conceptual grasp. Recurring error: forgetting ×100 on position delta. Intuited gamma unprompted. |
-| Gamma | 2 | 88% | 1 | Strong — ATM/expiration risk, long/short gamma, pin risk all correct. ×100 habit locked in. |
+| Delta | 2 | 88% | 2 | Sign errors fixed — short put = positive delta locked in. Hedge ratios clean. ×100 solid. |
+| Gamma | 2 | 91% | 2 | Deep drill — short gamma mechanics, ATM peak, deep ITM/OTM → zero, pin risk. Correctly pushed back on whipsaw example. Strong conceptual thinker. |
 | Theta | 2 | 90% | 1 | Strong — decay calculation, long vs short theta, DTE impact, trade management all correct. Small P&L confusion early (fixed quickly). |
 | Vega | 2 | 92% | 1 | Excellent — vega/theta tradeoff, long/short vega, vol crush all correct. Near-perfect session. |
 | Rho | 2 | 95% | 1 | Excellent — nailed cost of carry logic unprompted. Strong conceptual thinker. |
 | Implied Volatility | 3 | 93% | 1 | Excellent — vol crush, IV mean reversion, buy vs sell environments, daily move calc all correct. |
 | Historical/Realized Volatility | 3 | 95% | 1 | Solid — IV vs HV comparison, volatility risk premium, seller edge all correct. |
 | IV Rank & IV Percentile | 3 | 88% | 1 | IVR calc correct. IVP concept needed explanation but understood quickly. Spike distortion concept solid. |
-| Volatility Skew | 3 | 85% | 1 | Strong — put skew, reverse skew, seller edge all correct. Instinctively described spread trades twice. Minor ATM vs OTM pricing confusion. |
+| Volatility Skew | 3 | 88% | 2 | Crash risk vs borrow cost distinction clarified. Risk reversal vs synthetic long stock distinction landed. Still initially attributed skew to hard-to-borrow. |
 | VIX | 3 | 95% | 1 | Perfect — fear gauge, mean reversion, high/low VIX environments all correct. |
 | Vol Crush | 3 | 92% | 1 | Strong — seller edge, IV collapse mechanics, straddle context all correct. |
 | Reversals & Conversions | 4 | 95% | 1 | Excellent — delta neutral, arbitrage mechanics, rate sensitivity, hard-to-borrow carry all correct. Intuited stock lending use case unprompted. |
-| Synthetic Positions | 4 | 85% | 1 | Strong — synthetic long/short stock correct. Confused covered call = synthetic long call (it's short put). Payoff intuition developing well. |
+| Synthetic Positions | 4 | 92% | 2 | All 6 synthetics drilled twice with numbers and P&L. Payoff walkthroughs clean. One swap (long stock vs long call in round 2). Greeks on synthetics (theta/vega ≈ 0) now solid. |
 | Box Spreads | 4 | 95% | 1 | Excellent — fixed payout, risk-free profit calc, early assignment risk all correct. |
 | Vertical Spreads | 5 | 92% | 1 | Excellent — all four spread types, debit vs credit, IV environment selection, P&L all correct. Minor wording on spread name (bullish vs bull). |
 | Straddles & Strangles | 5 | 85% | 3 | Scenario complete. Breakevens solid. Vol crush understood after explanation. Implied move concept (straddle price = expected move) needed explanation but landed well. Straddle vs strangle tradeoff — got structure, needed coaching on cost/breakeven tradeoff. |
@@ -37,10 +37,13 @@ Total Questions Answered: 115
 | Assignment Risk | 6 | 0% | 0 | Not yet started |
 
 ## Weak Areas (prioritize these)
-- None currently — Delta ×100 habit locked in, Gamma strong
+- Volatility Skew — initially attributes skew to hard-to-borrow rather than crash risk/hedging demand
+- IVR calculation — user prefers no calculation questions, concept only
 
 ## User Preferences
-- Deep in Level 5 strategies — Levels 1-4 complete
+- Focused on mastering Levels 1-4 deeply before advancing to Level 5-6
+- No IVR/IVP calculation questions — conceptual questions only
+- Integration scenarios preferred over isolated drills
 
 ## Session Log
 
@@ -168,6 +171,13 @@ Total Questions Answered: 115
 - Correct / Partial / Incorrect: 1 / 1 / 0
 - Key gaps identified: Strangle breakevens clean. Earnings straddle IV environment — right direction (low IV = buy), missed the vol crush post-earnings nuance and the implied move concept ($11.50 = expected move threshold).
 - Notes: Scenario still incomplete. Next session: finish earnings straddle scenario, then complete the topic with risk management and when to use straddles vs strangles.
+
+### 2026-06-12 — Session 20 (Levels 1-4 Deep Mastery Drill)
+- Topics covered: Delta (sign, hedge ratios), Gamma (short gamma mechanics, ATM peak, whipsaw), Synthetics (all 6 with numbers + P&L), Box Spreads (implied rates, borrowing mechanics), Rev Cons (legs, locked P&L, institutional rate spread arb), Volatility Skew, Implied Move, Vol Crush + Greeks interaction
+- Questions asked: ~40
+- Correct / Partial / Incorrect: 30 / 8 / 2
+- Key gaps identified: Initially attributed put skew to hard-to-borrow (corrected — crash risk is primary driver). IVR calculation error (26% not 74% — user requests no calculation questions going forward). Whipsaw/gamma question had nuance — user correctly pushed back on my framing.
+- Notes: User wants Levels 1-4 mastery before touching Level 5-6. Synthetics dramatically improved — all 6 positions solid. Strong instincts throughout, correctly challenged coach on two points.
 
 ### 2026-06-10 — Session 19 (Straddles & Strangles — complete + Iron Condor intro)
 - Topics covered: Earnings straddle scenario finish, vol crush, implied move, straddle vs strangle tradeoff, Iron Condor introduction (no quiz)
