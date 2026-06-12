@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Form — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link active">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title" id="pageTitle">New User</span>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card" style="max-width:560px">
+        <div class="card-body">
+          <form id="userForm">
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-control" id="email" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Name</label>
+              <input type="text" class="form-control" id="name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Role *</label>
+              <select class="form-control" id="role" required>
+                <option value="">Select role…</option>
+                <option value="user">User</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submitBtn">Save User</button>
+              <a href="users-list.html" class="btn btn-ghost">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+    import '../js/admin-guard.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (id) document.getElementById('pageTitle').textContent = 'Edit User';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    if (id) {
+      const { data, error } = await supabase.from('users').select('*').eq('id', id).single();
+      if (error) { showError(error.message); }
+      else {
+        document.getElementById('email').value = data.email ?? '';
+        document.getElementById('name').value = data.name ?? '';
+        document.getElementById('role').value = data.role ?? '';
+      }
+    }
+
+    document.getElementById('userForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+
+      const payload = {
+        email: document.getElementById('email').value.trim(),
+        name: document.getElementById('name').value.trim(),
+        role: document.getElementById('role').value,
+      };
+      if (id) payload.id = id;
+
+      const { error } = await supabase.from('users').upsert(payload);
+      if (error) { showError(error.message); btn.disabled = false; btn.textContent = 'Save User'; }
+      else { window.location.href = 'users-list.html'; }
+    });
+
+    function showError(msg) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+  </script>
+</body>
+</html>

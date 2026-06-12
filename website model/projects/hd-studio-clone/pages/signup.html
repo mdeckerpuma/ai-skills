@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--sidebar-bg); }
+    .auth-box { background: var(--surface); border-radius: 12px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .auth-logo { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .auth-logo span { color: var(--brand); }
+    .auth-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+    #successMsg { display:none; }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <div class="auth-logo">HD<span>Studio</span></div>
+    <div class="auth-subtitle">Create your account</div>
+
+    <div id="errorMsg"></div>
+    <div id="successMsg" class="alert alert-success" style="margin-bottom:16px">
+      Account created! Check your email to confirm your address, then <a href="login.html" style="color:var(--brand)">sign in</a>.
+    </div>
+
+    <form id="signupForm">
+      <div class="form-group">
+        <label class="form-label">Name</label>
+        <input type="text" class="form-control" id="name" placeholder="Your name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email *</label>
+        <input type="email" class="form-control" id="email" required placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password *</label>
+        <input type="password" class="form-control" id="password" required placeholder="Min 8 characters" minlength="8">
+      </div>
+      <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center" id="signupBtn">Create Account</button>
+      <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)">
+        Already have an account? <a href="login.html" style="color:var(--brand)">Sign in</a>
+      </p>
+    </form>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    document.getElementById('signupForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('signupBtn');
+      btn.disabled = true; btn.textContent = 'Creating account…';
+
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+      const name = document.getElementById('name').value.trim();
+
+      const { error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: { data: { name, role: 'user' } }
+      });
+
+      if (error) {
+        document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+        btn.disabled = false; btn.textContent = 'Create Account';
+      } else {
+        document.getElementById('signupForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = '';
+      }
+    });
+  </script>
+</body>
+</html>

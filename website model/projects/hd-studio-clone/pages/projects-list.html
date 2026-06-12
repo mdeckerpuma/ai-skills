@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projects — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link active">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Projects</span>
+      <div class="topbar-actions">
+        <a href="projects-form.html" class="btn btn-primary btn-sm">+ New Project</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card">
+        <div class="card-body">
+          <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search projects…">
+            <select id="statusFilter" class="form-control" style="max-width:140px">
+              <option value="">All statuses</option>
+              <option value="draft">Draft</option>
+              <option value="live">Live</option>
+              <option value="archived">Archived</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th onclick="sortBy('name')">Name</th>
+                  <th onclick="sortBy('status')">Status</th>
+                  <th onclick="sortBy('deploy_target')">Deploy Target</th>
+                  <th onclick="sortBy('credits_used')">Credits Used</th>
+                  <th onclick="sortBy('updated_at')">Updated</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="6"><div class="loader"><div class="spinner"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+    import { currentUser } from '../js/auth-guard.js';
+
+    const PAGE_SIZE = 25;
+    let allRows = [], filtered = [], currentPage = 1, sortKey = 'updated_at', sortAsc = false;
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    async function load() {
+      let query = supabase.from('projects').select('*').order('updated_at', { ascending: false });
+      const role = currentUser?.user_metadata?.role;
+      if (role !== 'admin') query = query.eq('owner_id', currentUser?.id);
+      const { data, error } = await query;
+      if (error) { showError(error.message); return; }
+      allRows = data || [];
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const status = document.getElementById('statusFilter').value;
+      filtered = allRows.filter(r =>
+        ((r.name||'').toLowerCase().includes(q) || (r.description||'').toLowerCase().includes(q)) &&
+        (!status || r.status === status)
+      );
+      currentPage = 1;
+      render();
+    }
+
+    window.sortBy = (key) => {
+      if (sortKey === key) sortAsc = !sortAsc; else { sortKey = key; sortAsc = true; }
+      filtered.sort((a, b) => {
+        const av = a[key] ?? '', bv = b[key] ?? '';
+        return sortAsc ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+      });
+      render();
+    };
+
+    const statusBadge = { draft: 'badge-yellow', live: 'badge-green', archived: 'badge-gray' };
+
+    function render() {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const page = filtered.slice(start, start + PAGE_SIZE);
+      const tbody = document.getElementById('tableBody');
+      if (!page.length) {
+        tbody.innerHTML = '<tr><td colspan="6"><div class="empty-state"><h3>No projects found</h3><p>Create your first project to get started.</p></div></td></tr>';
+      } else {
+        tbody.innerHTML = page.map(r => `
+          <tr>
+            <td><strong>${esc(r.name)}</strong><br><small style="color:var(--text-muted)">${esc(r.description||'')}</small></td>
+            <td><span class="badge ${statusBadge[r.status]||'badge-gray'}">${esc(r.status)}</span></td>
+            <td>${esc(r.deploy_target||'—')}</td>
+            <td>${r.credits_used ?? 0}</td>
+            <td>${fmtDate(r.updated_at)}</td>
+            <td><div class="row-actions">
+              <a href="projects-detail.html?id=${r.id}" class="btn btn-ghost btn-sm">View</a>
+              <a href="projects-form.html?id=${r.id}" class="btn btn-secondary btn-sm">Edit</a>
+              <a href="projects-delete.html?id=${r.id}" class="btn btn-danger btn-sm">Delete</a>
+            </div></td>
+          </tr>`).join('');
+      }
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const total = Math.ceil(filtered.length / PAGE_SIZE);
+      const el = document.getElementById('pagination');
+      if (total <= 1) { el.innerHTML = ''; return; }
+      let html = '';
+      if (currentPage > 1) html += `<button class="page-btn" onclick="goPage(${currentPage-1})">←</button>`;
+      for (let i = 1; i <= total; i++) {
+        if (i === 1 || i === total || Math.abs(i - currentPage) <= 1)
+          html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+        else if (Math.abs(i - currentPage) === 2) html += `<span style="padding:0 4px">…</span>`;
+      }
+      if (currentPage < total) html += `<button class="page-btn" onclick="goPage(${currentPage+1})">→</button>`;
+      html += `<span class="page-info">${Math.min((currentPage-1)*PAGE_SIZE+1, filtered.length)}–${Math.min(currentPage*PAGE_SIZE, filtered.length)} of ${filtered.length}</span>`;
+      el.innerHTML = html;
+    }
+
+    window.goPage = (p) => { currentPage = p; render(); };
+    function showError(msg) { document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${msg}</div>`; }
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmtDate(d) { return d ? new Date(d).toLocaleDateString() : '—'; }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilter);
+    document.getElementById('statusFilter').addEventListener('change', applyFilter);
+    load();
+  </script>
+</body>
+</html>

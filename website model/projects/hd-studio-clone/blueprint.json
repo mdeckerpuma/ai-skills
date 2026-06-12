@@ -1,0 +1,344 @@
+{
+  "version": "1.0",
+  "app": {
+    "name": "hd-studio-clone",
+    "display_name": "HD Studio Clone",
+    "type": "functional-platform",
+    "complexity": "medium"
+  },
+  "stack": {
+    "frontend": "html-js",
+    "auth": "supabase",
+    "database": "supabase-postgres",
+    "deploy": "vercel"
+  },
+  "schema": [
+    {
+      "table": "users",
+      "fields": [
+        { "name": "id", "type": "uuid", "primaryKey": true },
+        { "name": "email", "type": "text", "unique": true },
+        { "name": "name", "type": "text" },
+        { "name": "role", "type": "text", "note": "enum: admin, user" },
+        { "name": "created_at", "type": "timestamp" }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "table": "projects",
+      "fields": [
+        { "name": "id", "type": "uuid", "primaryKey": true },
+        { "name": "name", "type": "text" },
+        { "name": "description", "type": "text" },
+        { "name": "status", "type": "text", "note": "enum: draft, live, archived" },
+        { "name": "app_url", "type": "text" },
+        { "name": "deploy_target", "type": "text" },
+        { "name": "owner_id", "type": "uuid" },
+        { "name": "credits_used", "type": "integer" },
+        { "name": "created_at", "type": "timestamp" },
+        { "name": "updated_at", "type": "timestamp" }
+      ],
+      "foreignKeys": [
+        { "field": "owner_id", "references": "users.id" }
+      ]
+    },
+    {
+      "table": "showcase_items",
+      "fields": [
+        { "name": "id", "type": "uuid", "primaryKey": true },
+        { "name": "title", "type": "text" },
+        { "name": "description", "type": "text" },
+        { "name": "image_url", "type": "text" },
+        { "name": "app_url", "type": "text" },
+        { "name": "category", "type": "text" },
+        { "name": "created_at", "type": "timestamp" }
+      ],
+      "foreignKeys": []
+    },
+    {
+      "table": "pricing_plans",
+      "fields": [
+        { "name": "id", "type": "uuid", "primaryKey": true },
+        { "name": "name", "type": "text" },
+        { "name": "price", "type": "numeric" },
+        { "name": "credits_included", "type": "integer" },
+        { "name": "features", "type": "text[]" },
+        { "name": "created_at", "type": "timestamp" }
+      ],
+      "foreignKeys": []
+    }
+  ],
+  "routes": [
+    {
+      "path": "/api/users",
+      "method": "GET",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": true,
+      "description": "List all users"
+    },
+    {
+      "path": "/api/users",
+      "method": "POST",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": true,
+      "description": "Create a new user"
+    },
+    {
+      "path": "/api/users/:id",
+      "method": "GET",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": true,
+      "description": "Get user by ID"
+    },
+    {
+      "path": "/api/users/:id",
+      "method": "PUT",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": true,
+      "description": "Update user by ID"
+    },
+    {
+      "path": "/api/users/:id",
+      "method": "DELETE",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": true,
+      "description": "Delete user by ID"
+    },
+    {
+      "path": "/api/projects",
+      "method": "GET",
+      "auth": true,
+      "roles": ["admin", "user"],
+      "sensitive": false,
+      "description": "List projects — admin sees all, user sees own"
+    },
+    {
+      "path": "/api/projects",
+      "method": "POST",
+      "auth": true,
+      "roles": ["admin", "user"],
+      "sensitive": false,
+      "description": "Create a new project"
+    },
+    {
+      "path": "/api/projects/:id",
+      "method": "GET",
+      "auth": true,
+      "roles": ["admin", "user"],
+      "sensitive": false,
+      "description": "Get project by ID"
+    },
+    {
+      "path": "/api/projects/:id",
+      "method": "PUT",
+      "auth": true,
+      "roles": ["admin", "user"],
+      "sensitive": false,
+      "description": "Update project — admin any, user own only"
+    },
+    {
+      "path": "/api/projects/:id",
+      "method": "DELETE",
+      "auth": true,
+      "roles": ["admin", "user"],
+      "sensitive": false,
+      "description": "Delete project — admin any, user own only"
+    },
+    {
+      "path": "/api/showcase",
+      "method": "GET",
+      "auth": false,
+      "roles": [],
+      "sensitive": false,
+      "description": "List showcase items — public"
+    },
+    {
+      "path": "/api/showcase",
+      "method": "POST",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Create a showcase item"
+    },
+    {
+      "path": "/api/showcase/:id",
+      "method": "GET",
+      "auth": false,
+      "roles": [],
+      "sensitive": false,
+      "description": "Get showcase item by ID — public"
+    },
+    {
+      "path": "/api/showcase/:id",
+      "method": "PUT",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Update showcase item"
+    },
+    {
+      "path": "/api/showcase/:id",
+      "method": "DELETE",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Delete showcase item"
+    },
+    {
+      "path": "/api/pricing",
+      "method": "GET",
+      "auth": false,
+      "roles": [],
+      "sensitive": false,
+      "description": "List pricing plans — public"
+    },
+    {
+      "path": "/api/pricing",
+      "method": "POST",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Create a pricing plan"
+    },
+    {
+      "path": "/api/pricing/:id",
+      "method": "PUT",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Update pricing plan"
+    },
+    {
+      "path": "/api/pricing/:id",
+      "method": "DELETE",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Delete pricing plan"
+    },
+    {
+      "path": "/api/analytics",
+      "method": "GET",
+      "auth": true,
+      "roles": ["admin"],
+      "sensitive": false,
+      "description": "Aggregate stats: total users, active projects, total credits used"
+    }
+  ],
+  "components": [
+    {
+      "name": "Landing",
+      "route": "/",
+      "type": "landing",
+      "data": ["showcase_items", "pricing_plans"],
+      "roles": [],
+      "features": ["public"]
+    },
+    {
+      "name": "Dashboard",
+      "route": "/dashboard",
+      "type": "dashboard",
+      "data": ["projects", "users"],
+      "roles": ["admin"],
+      "features": ["charts", "kpi-cards"]
+    },
+    {
+      "name": "ProjectList",
+      "route": "/projects",
+      "type": "list",
+      "data": ["projects"],
+      "roles": ["admin", "user"],
+      "features": ["search", "filter", "crud"]
+    },
+    {
+      "name": "ProjectDetail",
+      "route": "/projects/:id",
+      "type": "detail",
+      "data": ["projects"],
+      "roles": ["admin", "user"],
+      "features": ["crud"]
+    },
+    {
+      "name": "ProjectWizard",
+      "route": "/projects/new",
+      "type": "form",
+      "data": ["projects"],
+      "roles": ["admin", "user"],
+      "features": ["multi-step-form"],
+      "steps": [
+        "App Info (name, description)",
+        "Configuration (deploy target, stack preferences)",
+        "Review & Launch"
+      ]
+    },
+    {
+      "name": "ShowcaseList",
+      "route": "/showcase",
+      "type": "list",
+      "data": ["showcase_items"],
+      "roles": [],
+      "features": ["search", "filter", "public"]
+    },
+    {
+      "name": "ShowcaseForm",
+      "route": "/showcase/new",
+      "type": "form",
+      "data": ["showcase_items"],
+      "roles": ["admin"],
+      "features": ["crud"]
+    },
+    {
+      "name": "PricingList",
+      "route": "/pricing",
+      "type": "list",
+      "data": ["pricing_plans"],
+      "roles": [],
+      "features": ["public", "crud"]
+    },
+    {
+      "name": "PricingForm",
+      "route": "/pricing/new",
+      "type": "form",
+      "data": ["pricing_plans"],
+      "roles": ["admin"],
+      "features": ["crud"]
+    },
+    {
+      "name": "UserList",
+      "route": "/users",
+      "type": "list",
+      "data": ["users"],
+      "roles": ["admin"],
+      "features": ["search", "crud"]
+    },
+    {
+      "name": "Login",
+      "route": "/login",
+      "type": "auth",
+      "data": [],
+      "roles": [],
+      "features": ["email-password", "magic-link"]
+    },
+    {
+      "name": "Signup",
+      "route": "/signup",
+      "type": "auth",
+      "data": [],
+      "roles": [],
+      "features": ["email-password"]
+    },
+    {
+      "name": "Unauthorized",
+      "route": "/unauthorized",
+      "type": "auth",
+      "data": [],
+      "roles": [],
+      "features": []
+    }
+  ]
+}

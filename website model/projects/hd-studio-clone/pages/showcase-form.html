@@ -1,0 +1,116 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Showcase Form — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link active">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title" id="pageTitle">New Showcase Item</span>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card" style="max-width:560px">
+        <div class="card-body">
+          <form id="showcaseForm">
+            <div class="form-group">
+              <label class="form-label">Title *</label>
+              <input type="text" class="form-control" id="title" required placeholder="Client Intake Portal">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea class="form-control" id="description" placeholder="What does this app showcase?"></textarea>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category</label>
+              <input type="text" class="form-control" id="category" placeholder="e.g. Client Portal, Dashboard, Internal Tool">
+            </div>
+            <div class="form-group">
+              <label class="form-label">App URL</label>
+              <input type="text" class="form-control" id="app_url" placeholder="https://example.vercel.app">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Image URL</label>
+              <input type="text" class="form-control" id="image_url" placeholder="https://…/screenshot.png">
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submitBtn">Save Item</button>
+              <a href="showcase-list.html" class="btn btn-ghost">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+    import '../js/admin-guard.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (id) document.getElementById('pageTitle').textContent = 'Edit Showcase Item';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    if (id) {
+      const { data, error } = await supabase.from('showcase_items').select('*').eq('id', id).single();
+      if (error) { showError(error.message); }
+      else {
+        document.getElementById('title').value = data.title ?? '';
+        document.getElementById('description').value = data.description ?? '';
+        document.getElementById('category').value = data.category ?? '';
+        document.getElementById('app_url').value = data.app_url ?? '';
+        document.getElementById('image_url').value = data.image_url ?? '';
+      }
+    }
+
+    document.getElementById('showcaseForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+
+      const payload = {
+        title: document.getElementById('title').value.trim(),
+        description: document.getElementById('description').value.trim(),
+        category: document.getElementById('category').value.trim(),
+        app_url: document.getElementById('app_url').value.trim(),
+        image_url: document.getElementById('image_url').value.trim(),
+      };
+      if (id) payload.id = id;
+
+      const { error } = await supabase.from('showcase_items').upsert(payload);
+      if (error) { showError(error.message); btn.disabled = false; btn.textContent = 'Save Item'; }
+      else { window.location.href = 'showcase-list.html'; }
+    });
+
+    function showError(msg) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+  </script>
+</body>
+</html>

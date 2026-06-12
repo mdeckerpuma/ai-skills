@@ -1,0 +1,32 @@
+{
+  "name": "hd-studio-clone",
+  "display_name": "HD Studio Clone",
+  "type": "functional-platform",
+  "complexity": "medium",
+  "entities": [
+    {
+      "name": "Users",
+      "fields": ["id", "email", "name", "role", "created_at"]
+    },
+    {
+      "name": "Projects",
+      "fields": ["id", "name", "description", "status", "app_url", "deploy_target", "owner_id", "credits_used", "created_at", "updated_at"]
+    },
+    {
+      "name": "ShowcaseItems",
+      "fields": ["id", "title", "description", "image_url", "app_url", "category", "created_at"]
+    },
+    {
+      "name": "PricingPlans",
+      "fields": ["id", "name", "price", "credits_included", "features", "created_at"]
+    }
+  ],
+  "auth": {
+    "required": true,
+    "provider": "supabase",
+    "methods": ["email-password", "magic-link"]
+  },
+  "roles": ["admin", "user"],
+  "features": ["crud", "dashboard", "multi-step-forms", "search-filter"],
+  "deploy": "vercel"
+}

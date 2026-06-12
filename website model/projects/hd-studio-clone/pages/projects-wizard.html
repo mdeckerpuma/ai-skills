@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Project — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .wizard-container { max-width: 600px; }
+
+    .progress-track {
+      display: flex; align-items: flex-start; margin-bottom: 32px; position: relative;
+    }
+    .progress-step {
+      flex: 1; display: flex; flex-direction: column; align-items: center; position: relative; z-index: 1;
+    }
+    .progress-step + .progress-step::before {
+      content: ''; position: absolute; right: 50%; top: 15px;
+      width: 100%; height: 2px; background: var(--border); z-index: 0;
+    }
+    .progress-step.completed + .progress-step::before { background: var(--brand); }
+    .step-circle {
+      width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--border);
+      background: var(--bg); display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 700; color: var(--text-muted); z-index: 1;
+      transition: all 0.2s;
+    }
+    .progress-step.active   .step-circle { border-color: var(--brand); color: var(--brand); background: var(--surface); }
+    .progress-step.completed .step-circle { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .step-label {
+      font-size: 11px; font-weight: 500; color: var(--text-muted);
+      margin-top: 8px; text-align: center; white-space: nowrap;
+    }
+    .progress-step.active   .step-label { color: var(--text); font-weight: 600; }
+    .progress-step.completed .step-label { color: var(--brand); }
+
+    .wizard-step { display: none; }
+    .wizard-step.active { display: block; animation: fadeIn 0.15s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+    .wizard-card-header { padding: 20px 24px 0; }
+    .wizard-card-header h2 { margin: 0 0 4px; font-size: 18px; font-weight: 700; }
+    .wizard-card-header p { margin: 0; font-size: 13px; color: var(--text-muted); }
+
+    .review-grid { display: grid; grid-template-columns: 140px 1fr; }
+    .review-key {
+      font-size: 13px; color: var(--text-muted); padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .review-val {
+      font-size: 14px; color: var(--text); padding: 10px 0;
+      border-bottom: 1px solid var(--border); font-weight: 500; word-break: break-word;
+    }
+
+    .wizard-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-top: 24px; padding-top: 20px; border-top: 1px solid var(--border);
+    }
+    .step-hint { font-size: 13px; color: var(--text-muted); }
+    .field-error { color: #ef4444; font-size: 12px; margin-top: 4px; }
+    .required-star { color: #ef4444; margin-left: 2px; }
+    .deploy-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .deploy-chip {
+      padding: 8px 16px; border-radius: 20px; border: 1.5px solid var(--border);
+      background: var(--bg); cursor: pointer; font-size: 13px; font-weight: 500;
+      color: var(--text-muted); transition: all 0.15s; user-select: none;
+    }
+    .deploy-chip:hover { border-color: var(--brand); color: var(--text); }
+    .deploy-chip.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+    .status-chips { display: flex; gap: 8px; margin-top: 2px; }
+    .status-chip {
+      padding: 6px 14px; border-radius: 20px; border: 1.5px solid var(--border);
+      background: var(--bg); cursor: pointer; font-size: 13px; font-weight: 500;
+      color: var(--text-muted); transition: all 0.15s; user-select: none;
+    }
+    .status-chip.selected { border-color: var(--brand); background: var(--brand); color: #fff; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="../dashboard.html" class="nav-link">📊 Analytics</a>
+      <a href="projects-list.html" class="nav-link active">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">New Project</span>
+      <div class="topbar-actions">
+        <a href="projects-list.html" class="btn btn-ghost btn-sm">Cancel</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="wizard-container">
+
+        <!-- Progress Track -->
+        <div class="progress-track">
+          <div class="progress-step active" id="prog-1">
+            <div class="step-circle">1</div>
+            <div class="step-label">App Info</div>
+          </div>
+          <div class="progress-step" id="prog-2">
+            <div class="step-circle">2</div>
+            <div class="step-label">Configuration</div>
+          </div>
+          <div class="progress-step" id="prog-3">
+            <div class="step-circle">✓</div>
+            <div class="step-label">Review & Launch</div>
+          </div>
+        </div>
+
+        <!-- Step 1: App Info -->
+        <div class="wizard-step active card" id="step-1">
+          <div class="wizard-card-header">
+            <h2>App Info</h2>
+            <p>Tell us about your new project</p>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">
+                Project Name <span class="required-star">*</span>
+              </label>
+              <input
+                type="text" class="form-control" id="f-name" name="name"
+                placeholder="My Awesome App" maxlength="100" autocomplete="off"
+              >
+              <div class="field-error" id="err-name" style="display:none"></div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Description</label>
+              <textarea
+                class="form-control" id="f-description" name="description"
+                rows="4" placeholder="What does this app do? Who is it for?"
+              ></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Configuration -->
+        <div class="wizard-step card" id="step-2">
+          <div class="wizard-card-header">
+            <h2>Configuration</h2>
+            <p>Set up deployment and initial project status</p>
+          </div>
+          <div class="card-body">
+            <div class="form-group">
+              <label class="form-label">Deploy Target</label>
+              <div class="deploy-chips" id="deployChips">
+                <div class="deploy-chip" data-value="vercel">Vercel</div>
+                <div class="deploy-chip" data-value="netlify">Netlify</div>
+                <div class="deploy-chip" data-value="railway">Railway</div>
+                <div class="deploy-chip" data-value="render">Render</div>
+                <div class="deploy-chip" data-value="other">Other</div>
+              </div>
+              <input type="hidden" id="f-deploy_target" name="deploy_target">
+            </div>
+            <div class="form-group" style="margin-top:24px">
+              <label class="form-label">Initial Status</label>
+              <div class="status-chips" id="statusChips">
+                <div class="status-chip selected" data-value="draft">Draft</div>
+                <div class="status-chip" data-value="live">Live</div>
+                <div class="status-chip" data-value="archived">Archived</div>
+              </div>
+              <input type="hidden" id="f-status" name="status" value="draft">
+              <small style="color:var(--text-muted);font-size:12px;margin-top:6px;display:block">
+                You can update this later from the project detail page
+              </small>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Review & Launch -->
+        <div class="wizard-step card" id="step-3">
+          <div class="wizard-card-header">
+            <h2>Review & Launch</h2>
+            <p>Confirm your project details before creating</p>
+          </div>
+          <div class="card-body">
+            <div class="review-grid" id="reviewGrid"></div>
+          </div>
+        </div>
+
+        <!-- Footer Navigation -->
+        <div class="wizard-footer">
+          <button class="btn btn-ghost" id="btnBack" style="visibility:hidden" onclick="goBack()">
+            ← Back
+          </button>
+          <span class="step-hint" id="stepHint">Step 1 of 3</span>
+          <button class="btn btn-primary" id="btnNext" onclick="goNext()">
+            Next →
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    let currentStep = 1;
+    const TOTAL = 3;
+    const STORAGE_KEY = 'hd_project_wizard';
+
+    // ── Chip pickers ──────────────────────────────────────────────
+    document.getElementById('deployChips').addEventListener('click', e => {
+      const chip = e.target.closest('.deploy-chip');
+      if (!chip) return;
+      document.querySelectorAll('.deploy-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      const val = chip.dataset.value;
+      document.getElementById('f-deploy_target').value = val;
+      saveField('deploy_target', val);
+    });
+
+    document.getElementById('statusChips').addEventListener('click', e => {
+      const chip = e.target.closest('.status-chip');
+      if (!chip) return;
+      document.querySelectorAll('.status-chip').forEach(c => c.classList.remove('selected'));
+      chip.classList.add('selected');
+      const val = chip.dataset.value;
+      document.getElementById('f-status').value = val;
+      saveField('status', val);
+    });
+
+    // ── Session storage ───────────────────────────────────────────
+    function saveField(name, value) {
+      const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+      state[name] = value;
+      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    }
+
+    document.addEventListener('input', e => {
+      if (e.target.name) saveField(e.target.name, e.target.value);
+    });
+
+    function restoreState() {
+      const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+      ['name', 'description'].forEach(k => {
+        if (state[k]) {
+          const el = document.getElementById(`f-${k}`);
+          if (el) el.value = state[k];
+        }
+      });
+      if (state.deploy_target) {
+        document.getElementById('f-deploy_target').value = state.deploy_target;
+        document.querySelectorAll('.deploy-chip').forEach(c => {
+          c.classList.toggle('selected', c.dataset.value === state.deploy_target);
+        });
+      }
+      if (state.status) {
+        document.getElementById('f-status').value = state.status;
+        document.querySelectorAll('.status-chip').forEach(c => {
+          c.classList.toggle('selected', c.dataset.value === state.status);
+        });
+      }
+    }
+
+    // ── Progress bar ──────────────────────────────────────────────
+    function updateProgress() {
+      for (let i = 1; i <= TOTAL; i++) {
+        const prog = document.getElementById(`prog-${i}`);
+        prog.classList.remove('active', 'completed');
+        if (i < currentStep) prog.classList.add('completed');
+        else if (i === currentStep) prog.classList.add('active');
+      }
+      document.getElementById('stepHint').textContent = `Step ${currentStep} of ${TOTAL}`;
+      document.getElementById('btnBack').style.visibility = currentStep > 1 ? 'visible' : 'hidden';
+      const next = document.getElementById('btnNext');
+      next.textContent = currentStep === TOTAL ? '🚀 Create Project' : 'Next →';
+    }
+
+    // ── Show step ─────────────────────────────────────────────────
+    function showStep(n) {
+      document.querySelectorAll('.wizard-step').forEach(s => s.classList.remove('active'));
+      document.getElementById(`step-${n}`).classList.add('active');
+      currentStep = n;
+      updateProgress();
+      if (n === TOTAL) buildReview();
+    }
+
+    // ── Review summary ────────────────────────────────────────────
+    function buildReview() {
+      const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+      const rows = [
+        ['Project Name',  state.name        || '—'],
+        ['Description',   state.description || '(none)'],
+        ['Deploy Target', state.deploy_target || '(not set)'],
+        ['Status',        state.status       || 'draft'],
+      ];
+      document.getElementById('reviewGrid').innerHTML = rows
+        .map(([k, v]) => `<div class="review-key">${k}</div><div class="review-val">${esc(v)}</div>`)
+        .join('');
+    }
+
+    // ── Validation ────────────────────────────────────────────────
+    function validateStep(n) {
+      if (n === 1) {
+        const name = document.getElementById('f-name').value.trim();
+        const errEl = document.getElementById('err-name');
+        if (!name) {
+          errEl.textContent = 'Project name is required.';
+          errEl.style.display = '';
+          document.getElementById('f-name').focus();
+          return false;
+        }
+        errEl.style.display = 'none';
+      }
+      return true;
+    }
+
+    // ── Navigation ────────────────────────────────────────────────
+    window.goNext = async () => {
+      if (!validateStep(currentStep)) return;
+      if (currentStep < TOTAL) {
+        showStep(currentStep + 1);
+      } else {
+        await submitProject();
+      }
+    };
+
+    window.goBack = () => {
+      if (currentStep > 1) showStep(currentStep - 1);
+    };
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') goNext();
+    });
+
+    // ── Submit ────────────────────────────────────────────────────
+    async function submitProject() {
+      const btn = document.getElementById('btnNext');
+      btn.disabled = true;
+      btn.textContent = 'Creating…';
+
+      const state = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || '{}');
+      const payload = {
+        name:          state.name?.trim(),
+        description:   state.description?.trim() || null,
+        deploy_target: state.deploy_target || null,
+        status:        state.status || 'draft',
+        owner_id:      session.user.id,
+        credits_used:  0,
+        updated_at:    new Date().toISOString(),
+      };
+
+      const { error } = await supabase.from('projects').insert(payload);
+      if (error) {
+        document.getElementById('errorMsg').innerHTML =
+          `<div class="alert alert-danger">${error.message}</div>`;
+        btn.disabled = false;
+        btn.textContent = '🚀 Create Project';
+        return;
+      }
+
+      sessionStorage.setItem('hd_project_created', JSON.stringify({
+        name:          payload.name,
+        description:   payload.description,
+        deploy_target: payload.deploy_target,
+        status:        payload.status,
+      }));
+      sessionStorage.removeItem(STORAGE_KEY);
+      window.location.href = 'projects-confirm.html';
+    }
+
+    function esc(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // ── Init ──────────────────────────────────────────────────────
+    restoreState();
+    updateProgress();
+  </script>
+</body>
+</html>

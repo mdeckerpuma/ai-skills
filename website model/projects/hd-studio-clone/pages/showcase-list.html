@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Showcase — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .gallery { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+    .gallery-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; transition: all 0.15s; }
+    .gallery-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+    .gallery-card img { width: 100%; height: 160px; object-fit: cover; background: var(--bg); display: block; }
+    .gallery-card-body { padding: 16px; }
+    .gallery-card-title { font-weight: 600; margin-bottom: 6px; }
+    .gallery-card-desc { font-size: 13px; color: var(--text-muted); margin-bottom: 12px; }
+    .gallery-card-actions { display: flex; gap: 8px; }
+    .filter-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+    .filter-chip { padding: 6px 14px; border-radius: 99px; border: 1px solid var(--border); background: var(--surface); font-size: 13px; cursor: pointer; transition: all 0.15s; }
+    .filter-chip.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link active">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Showcase</span>
+      <div class="topbar-actions">
+        <a href="showcase-form.html" class="btn btn-primary btn-sm" id="addBtn" style="display:none">+ Add Item</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="search-bar">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search showcase…">
+      </div>
+      <div class="filter-bar" id="filterBar">
+        <button class="filter-chip active" onclick="setCategory('')">All</button>
+      </div>
+      <div class="gallery" id="gallery">
+        <div style="grid-column:1/-1"><div class="loader"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    let allItems = [], activeCategory = '', isAdmin = false;
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session?.user?.user_metadata?.role === 'admin') {
+      isAdmin = true;
+      document.getElementById('addBtn').style.display = '';
+    }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.reload();
+    });
+
+    async function load() {
+      const { data, error } = await supabase.from('showcase_items').select('*').order('created_at', { ascending: false });
+      if (error) { document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${error.message}</div>`; return; }
+      allItems = data || [];
+      buildFilters();
+      applyFilter();
+    }
+
+    function buildFilters() {
+      const cats = [...new Set(allItems.map(i => i.category).filter(Boolean))];
+      const bar = document.getElementById('filterBar');
+      bar.innerHTML = `<button class="filter-chip active" onclick="setCategory('')">All</button>` +
+        cats.map(c => `<button class="filter-chip" onclick="setCategory('${esc(c)}')">${esc(c)}</button>`).join('');
+    }
+
+    window.setCategory = (cat) => {
+      activeCategory = cat;
+      document.querySelectorAll('.filter-chip').forEach(b => b.classList.toggle('active', b.textContent.trim() === (cat || 'All')));
+      applyFilter();
+    };
+
+    function applyFilter() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      const items = allItems.filter(i =>
+        (!activeCategory || i.category === activeCategory) &&
+        ((i.title||'').toLowerCase().includes(q) || (i.description||'').toLowerCase().includes(q))
+      );
+      renderGallery(items);
+    }
+
+    function renderGallery(items) {
+      const el = document.getElementById('gallery');
+      if (!items.length) {
+        el.innerHTML = '<div style="grid-column:1/-1"><div class="empty-state"><h3>No items found</h3></div></div>';
+        return;
+      }
+      el.innerHTML = items.map(i => `
+        <div class="gallery-card">
+          ${i.image_url ? `<img src="${esc(i.image_url)}" alt="${esc(i.title)}" onerror="this.style.display='none'">` : '<div style="height:160px;background:var(--bg)"></div>'}
+          <div class="gallery-card-body">
+            <div class="gallery-card-title">${esc(i.title)}</div>
+            ${i.category ? `<span class="badge badge-gray" style="margin-bottom:8px">${esc(i.category)}</span>` : ''}
+            <div class="gallery-card-desc">${esc(i.description||'')}</div>
+            <div class="gallery-card-actions">
+              ${i.app_url ? `<a href="${esc(i.app_url)}" target="_blank" rel="noopener" class="btn btn-primary btn-sm">View App</a>` : ''}
+              <a href="showcase-detail.html?id=${i.id}" class="btn btn-ghost btn-sm">Details</a>
+              ${isAdmin ? `<a href="showcase-form.html?id=${i.id}" class="btn btn-secondary btn-sm">Edit</a>` : ''}
+            </div>
+          </div>
+        </div>`).join('');
+    }
+
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilter);
+    load();
+  </script>
+</body>
+</html>

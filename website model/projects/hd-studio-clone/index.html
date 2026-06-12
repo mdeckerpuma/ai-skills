@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .home-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 24px; }
+    .nav-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px 20px; text-decoration: none; color: var(--text); transition: all 0.15s; display: flex; flex-direction: column; gap: 8px; }
+    .nav-card:hover { border-color: var(--brand); box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .nav-card-icon { font-size: 28px; }
+    .nav-card-title { font-weight: 600; font-size: 15px; }
+    .nav-card-desc { font-size: 13px; color: var(--text-muted); }
+    .welcome { margin-bottom: 8px; font-size: 22px; font-weight: 700; }
+    .welcome-sub { color: var(--text-muted); font-size: 14px; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="index.html" class="nav-link active">🏠 Dashboard</a>
+      <a href="dashboard.html" class="nav-link">📊 Analytics</a>
+      <a href="pages/projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="pages/showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pages/pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="pages/users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Dashboard</span>
+      <div class="topbar-actions">
+        <span id="userEmail" style="font-size:13px; color:var(--text-muted)"></span>
+      </div>
+    </header>
+    <div class="content">
+      <div class="welcome">Welcome to HD Studio Clone</div>
+      <div class="welcome-sub">Your app builder platform. Select a section to get started.</div>
+
+      <div class="home-grid">
+        <a href="dashboard.html" class="nav-card">
+          <div class="nav-card-icon">📊</div>
+          <div class="nav-card-title">Analytics</div>
+          <div class="nav-card-desc">KPI cards, charts, and platform stats</div>
+        </a>
+        <a href="pages/projects-list.html" class="nav-card">
+          <div class="nav-card-icon">📁</div>
+          <div class="nav-card-title">Projects</div>
+          <div class="nav-card-desc">Create, manage, and deploy your apps</div>
+        </a>
+        <a href="pages/projects-wizard.html" class="nav-card">
+          <div class="nav-card-icon">🧙</div>
+          <div class="nav-card-title">New Project</div>
+          <div class="nav-card-desc">3-step guided project creation wizard</div>
+        </a>
+        <a href="pages/showcase-list.html" class="nav-card">
+          <div class="nav-card-icon">🎨</div>
+          <div class="nav-card-title">Showcase</div>
+          <div class="nav-card-desc">Browse example apps and templates</div>
+        </a>
+        <a href="pages/pricing-list.html" class="nav-card">
+          <div class="nav-card-icon">💰</div>
+          <div class="nav-card-title">Pricing</div>
+          <div class="nav-card-desc">View plans and credit allocations</div>
+        </a>
+        <a href="pages/users-list.html" class="nav-card">
+          <div class="nav-card-icon">👥</div>
+          <div class="nav-card-title">Users</div>
+          <div class="nav-card-desc">Manage platform users and roles</div>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from './js/supabase-client.js';
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = 'pages/login.html'; }
+
+    document.getElementById('userEmail').textContent = session?.user?.email ?? '';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'pages/login.html';
+    });
+  </script>
+</body>
+</html>

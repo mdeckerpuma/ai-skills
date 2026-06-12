@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Created — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .confirm-page { max-width: 520px; }
+    .confirm-hero {
+      text-align: center; padding: 32px 24px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .confirm-icon-wrap {
+      width: 64px; height: 64px; border-radius: 50%; background: var(--brand);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px; margin: 0 auto 16px;
+    }
+    .confirm-title { font-size: 22px; font-weight: 800; margin: 0 0 6px; }
+    .confirm-sub { font-size: 14px; color: var(--text-muted); margin: 0; }
+    .summary-section { padding: 20px 24px; }
+    .summary-section h3 { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin: 0 0 12px; }
+    .summary-grid { display: grid; grid-template-columns: 130px 1fr; }
+    .summary-key { font-size: 13px; color: var(--text-muted); padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .summary-val { font-size: 14px; font-weight: 500; color: var(--text); padding: 8px 0; border-bottom: 1px solid var(--border); word-break: break-word; }
+    .confirm-actions { padding: 20px 24px 24px; display: flex; flex-direction: column; gap: 10px; }
+    .confirm-actions .btn { justify-content: center; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="../dashboard.html" class="nav-link">📊 Analytics</a>
+      <a href="projects-list.html" class="nav-link active">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Project Created</span>
+    </header>
+    <div class="content">
+      <div class="confirm-page card">
+
+        <div class="confirm-hero">
+          <div class="confirm-icon-wrap">🚀</div>
+          <h1 class="confirm-title" id="confirmTitle">Project Created!</h1>
+          <p class="confirm-sub" id="confirmSub">Your project has been saved successfully.</p>
+        </div>
+
+        <div class="summary-section" id="summarySection" style="display:none">
+          <h3>What you submitted</h3>
+          <div class="summary-grid" id="summaryGrid"></div>
+        </div>
+
+        <div class="confirm-actions">
+          <a href="projects-wizard.html" class="btn btn-primary">+ Create another project</a>
+          <a href="projects-list.html" class="btn btn-secondary">View my projects</a>
+          <a href="../index.html" class="btn btn-ghost">Go to Dashboard</a>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) { window.location.href = 'login.html'; }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    function esc(s) {
+      return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    // Render summary from sessionStorage (set by wizard on successful submit)
+    const created = JSON.parse(sessionStorage.getItem('hd_project_created') || 'null');
+    if (created) {
+      document.getElementById('confirmTitle').textContent = `"${created.name}" is ready!`;
+      document.getElementById('confirmSub').textContent = 'Your project has been saved. Start building.';
+
+      const rows = [
+        ['Name',          created.name          || '—'],
+        ['Description',   created.description   || '(none)'],
+        ['Deploy Target', created.deploy_target || '(not set)'],
+        ['Status',        created.status        || 'draft'],
+      ];
+      document.getElementById('summaryGrid').innerHTML = rows
+        .map(([k, v]) => `<div class="summary-key">${k}</div><div class="summary-val">${esc(v)}</div>`)
+        .join('');
+
+      document.getElementById('summarySection').style.display = '';
+      sessionStorage.removeItem('hd_project_created');
+    }
+  </script>
+</body>
+</html>

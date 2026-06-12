@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--sidebar-bg); }
+    .auth-box { background: var(--surface); border-radius: 12px; padding: 40px; width: 100%; max-width: 400px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+    .auth-logo { font-size: 22px; font-weight: 800; color: var(--text); margin-bottom: 8px; }
+    .auth-logo span { color: var(--brand); }
+    .auth-subtitle { font-size: 13px; color: var(--text-muted); margin-bottom: 28px; }
+    .tab-bar { display: flex; border-bottom: 2px solid var(--border); margin-bottom: 24px; }
+    .tab { padding: 8px 16px; font-size: 14px; font-weight: 500; cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -2px; color: var(--text-muted); }
+    .tab.active { color: var(--brand); border-bottom-color: var(--brand); }
+    .divider { text-align: center; color: var(--text-muted); font-size: 12px; margin: 16px 0; position: relative; }
+    .divider::before, .divider::after { content: ''; position: absolute; top: 50%; width: 42%; height: 1px; background: var(--border); }
+    .divider::before { left: 0; } .divider::after { right: 0; }
+    .magic-btn { width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius); font-size: 14px; cursor: pointer; margin-bottom: 8px; transition: all 0.15s; }
+    .magic-btn:hover { border-color: var(--brand); }
+    #successMsg { display:none; text-align:center; padding: 20px; }
+  </style>
+</head>
+<body>
+  <div class="auth-box">
+    <div class="auth-logo">HD<span>Studio</span></div>
+    <div class="auth-subtitle">Sign in to your account</div>
+
+    <div class="tab-bar">
+      <div class="tab active" onclick="setTab('password')">Password</div>
+      <div class="tab" onclick="setTab('magic')">Magic Link</div>
+    </div>
+
+    <div id="errorMsg"></div>
+
+    <div id="passwordForm">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" id="pwEmail" placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-control" id="pwPassword" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="signInBtn" onclick="signIn()">Sign In</button>
+      <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)">
+          No account? <a href="signup.html" style="color:var(--brand)">Sign up</a>
+        &nbsp;·&nbsp;
+        <a href="reset-password.html" style="color:var(--brand)">Forgot password?</a>
+      </p>
+    </div>
+
+    <div id="magicForm" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-control" id="magicEmail" placeholder="you@example.com">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center" id="magicBtn" onclick="sendMagicLink()">Send Magic Link</button>
+    </div>
+
+    <div id="successMsg" class="alert alert-success">
+      Check your email for a sign-in link.
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const redirectTarget = params.get('redirect') || '../index.html';
+
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session) { window.location.href = redirectTarget; }
+
+    window.setTab = (tab) => {
+      document.querySelectorAll('.tab').forEach((t, i) => t.classList.toggle('active', (i===0&&tab==='password')||(i===1&&tab==='magic')));
+      document.getElementById('passwordForm').style.display = tab === 'password' ? '' : 'none';
+      document.getElementById('magicForm').style.display = tab === 'magic' ? '' : 'none';
+    };
+
+    window.signIn = async () => {
+      const btn = document.getElementById('signInBtn');
+      btn.disabled = true; btn.textContent = 'Signing in…';
+      const email = document.getElementById('pwEmail').value.trim();
+      const password = document.getElementById('pwPassword').value;
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
+      if (error) {
+        showError(error.message);
+        btn.disabled = false; btn.textContent = 'Sign In';
+      } else {
+        window.location.href = redirectTarget;
+      }
+    };
+
+    window.sendMagicLink = async () => {
+      const btn = document.getElementById('magicBtn');
+      btn.disabled = true; btn.textContent = 'Sending…';
+      const email = document.getElementById('magicEmail').value.trim();
+      const { error } = await supabase.auth.signInWithOtp({ email });
+      if (error) {
+        showError(error.message);
+        btn.disabled = false; btn.textContent = 'Send Magic Link';
+      } else {
+        document.getElementById('magicForm').style.display = 'none';
+        document.getElementById('successMsg').style.display = '';
+      }
+    };
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Enter') {
+        const tab = document.querySelector('.tab.active')?.textContent;
+        if (tab === 'Password') window.signIn();
+        else window.sendMagicLink();
+      }
+    });
+
+    function showError(msg) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+  </script>
+</body>
+</html>

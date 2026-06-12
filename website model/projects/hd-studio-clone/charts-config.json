@@ -1,0 +1,78 @@
+{
+  "library": "chart.js",
+  "version": "4",
+  "cdnUrl": "https://cdn.jsdelivr.net/npm/chart.js",
+  "palette": ["#00c896", "#3b82f6", "#f59e0b", "#ef4444", "#8b5cf6", "#06b6d4", "#ec4899", "#84cc16"],
+  "charts": [
+    {
+      "id": "projects-status-chart",
+      "entity": "projects",
+      "field": "status",
+      "type": "bar",
+      "title": "Projects by Status",
+      "query": "SELECT status, COUNT(*) FROM projects GROUP BY status",
+      "color": "#00c896"
+    },
+    {
+      "id": "users-role-chart",
+      "entity": "users",
+      "field": "role",
+      "type": "doughnut",
+      "title": "Users by Role",
+      "query": "SELECT role, COUNT(*) FROM users GROUP BY role",
+      "color": "#3b82f6"
+    },
+    {
+      "id": "projects-trend-chart",
+      "entity": "projects",
+      "field": "created_at",
+      "type": "line",
+      "title": "Projects Created Over Time",
+      "query": "SELECT DATE_TRUNC('month', created_at), COUNT(*) FROM projects GROUP BY 1 ORDER BY 1",
+      "color": "#f59e0b"
+    },
+    {
+      "id": "showcase-category-chart",
+      "entity": "showcase_items",
+      "field": "category",
+      "type": "bar",
+      "title": "Showcase by Category",
+      "query": "SELECT category, COUNT(*) FROM showcase_items GROUP BY category",
+      "color": "#8b5cf6"
+    }
+  ],
+  "kpis": [
+    {
+      "id": "total-users-kpi",
+      "entity": "users",
+      "field": "id",
+      "label": "Total Users",
+      "aggregation": "COUNT",
+      "format": "number"
+    },
+    {
+      "id": "total-projects-kpi",
+      "entity": "projects",
+      "field": "id",
+      "label": "Total Projects",
+      "aggregation": "COUNT",
+      "format": "number"
+    },
+    {
+      "id": "total-credits-kpi",
+      "entity": "projects",
+      "field": "credits_used",
+      "label": "Total Credits Used",
+      "aggregation": "SUM",
+      "format": "number"
+    },
+    {
+      "id": "total-showcase-kpi",
+      "entity": "showcase_items",
+      "field": "id",
+      "label": "Showcase Items",
+      "aggregation": "COUNT",
+      "format": "number"
+    }
+  ]
+}

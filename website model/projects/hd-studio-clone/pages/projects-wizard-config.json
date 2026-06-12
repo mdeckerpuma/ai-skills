@@ -1,0 +1,37 @@
+{
+  "entity": "projects",
+  "steps": [
+    {
+      "id": "step-1",
+      "title": "App Info",
+      "fields": ["name", "description"],
+      "conditions": []
+    },
+    {
+      "id": "step-2",
+      "title": "Configuration",
+      "fields": ["deploy_target", "status"],
+      "conditions": []
+    },
+    {
+      "id": "step-3",
+      "title": "Review & Launch",
+      "fields": [],
+      "isReview": true,
+      "conditions": []
+    }
+  ],
+  "fieldConditions": [],
+  "submission": {
+    "table": "projects",
+    "upsert": false,
+    "autoFields": {
+      "owner_id": "currentUser.id",
+      "credits_used": 0,
+      "updated_at": "now()"
+    },
+    "onSuccess": "redirect",
+    "confirmationPage": "projects-confirm.html",
+    "emailTrigger": "none"
+  }
+}

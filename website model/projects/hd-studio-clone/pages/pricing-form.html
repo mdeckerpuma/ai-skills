@@ -1,0 +1,115 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Form — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link active">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title" id="pageTitle">New Pricing Plan</span>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card" style="max-width:560px">
+        <div class="card-body">
+          <form id="pricingForm">
+            <div class="form-group">
+              <label class="form-label">Plan Name *</label>
+              <input type="text" class="form-control" id="name" required placeholder="e.g. Free, Starter, Pro">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Price ($/mo) *</label>
+              <input type="number" class="form-control" id="price" required min="0" step="0.01" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Credits Included</label>
+              <input type="number" class="form-control" id="credits_included" min="0" value="0">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Features (one per line)</label>
+              <textarea class="form-control" id="features" rows="6" placeholder="US-based support&#10;Account privacy&#10;Unlimited projects"></textarea>
+              <small style="color:var(--text-muted);font-size:12px;margin-top:4px;display:block">Enter each feature on its own line</small>
+            </div>
+            <div class="form-actions">
+              <button type="submit" class="btn btn-primary" id="submitBtn">Save Plan</button>
+              <a href="pricing-list.html" class="btn btn-ghost">Cancel</a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+    import '../js/admin-guard.js';
+
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get('id');
+    if (id) document.getElementById('pageTitle').textContent = 'Edit Pricing Plan';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    if (id) {
+      const { data, error } = await supabase.from('pricing_plans').select('*').eq('id', id).single();
+      if (error) { showError(error.message); }
+      else {
+        document.getElementById('name').value = data.name ?? '';
+        document.getElementById('price').value = data.price ?? 0;
+        document.getElementById('credits_included').value = data.credits_included ?? 0;
+        const features = Array.isArray(data.features) ? data.features : [];
+        document.getElementById('features').value = features.join('\n');
+      }
+    }
+
+    document.getElementById('pricingForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('submitBtn');
+      btn.disabled = true; btn.textContent = 'Saving…';
+
+      const featuresRaw = document.getElementById('features').value;
+      const features = featuresRaw.split('\n').map(s => s.trim()).filter(Boolean);
+
+      const payload = {
+        name: document.getElementById('name').value.trim(),
+        price: parseFloat(document.getElementById('price').value) || 0,
+        credits_included: parseInt(document.getElementById('credits_included').value) || 0,
+        features,
+      };
+      if (id) payload.id = id;
+
+      const { error } = await supabase.from('pricing_plans').upsert(payload);
+      if (error) { showError(error.message); btn.disabled = false; btn.textContent = 'Save Plan'; }
+      else { window.location.href = 'pricing-list.html'; }
+    });
+
+    function showError(msg) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+  </script>
+</body>
+</html>

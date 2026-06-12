@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 20px; }
+    .pricing-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 28px 24px; transition: all 0.15s; }
+    .pricing-card:hover { box-shadow: var(--shadow-md); }
+    .pricing-card.featured { border-color: var(--brand); }
+    .pricing-name { font-size: 15px; font-weight: 700; margin-bottom: 4px; }
+    .pricing-price { font-size: 32px; font-weight: 800; margin: 12px 0 4px; }
+    .pricing-price span { font-size: 14px; font-weight: 400; color: var(--text-muted); }
+    .pricing-credits { font-size: 13px; color: var(--text-muted); margin-bottom: 16px; }
+    .pricing-features { list-style: none; padding: 0; margin: 0 0 20px; }
+    .pricing-features li { font-size: 13px; padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .pricing-features li::before { content: '✓'; color: var(--brand); font-weight: 700; }
+    .admin-actions { display: flex; gap: 6px; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link active">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Pricing Plans</span>
+      <div class="topbar-actions">
+        <a href="pricing-form.html" class="btn btn-primary btn-sm" id="addBtn" style="display:none">+ Add Plan</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="pricing-grid" id="pricingGrid">
+        <div style="grid-column:1/-1"><div class="loader"><div class="spinner"></div></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const isAdmin = session?.user?.user_metadata?.role === 'admin';
+    if (isAdmin) document.getElementById('addBtn').style.display = '';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.reload();
+    });
+
+    const { data, error } = await supabase.from('pricing_plans').select('*').order('price', { ascending: true });
+    if (error) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+      document.getElementById('pricingGrid').innerHTML = '';
+    } else if (!data?.length) {
+      document.getElementById('pricingGrid').innerHTML = '<div class="empty-state"><h3>No pricing plans yet</h3></div>';
+    } else {
+      document.getElementById('pricingGrid').innerHTML = data.map((p, i) => {
+        const features = Array.isArray(p.features) ? p.features : (typeof p.features === 'string' ? JSON.parse(p.features || '[]') : []);
+        return `
+          <div class="pricing-card ${i === 1 ? 'featured' : ''}">
+            ${i === 1 ? '<div style="font-size:11px;font-weight:700;color:var(--brand);letter-spacing:1px;text-transform:uppercase;margin-bottom:8px">Most Popular</div>' : ''}
+            <div class="pricing-name">${esc(p.name)}</div>
+            <div class="pricing-price">$${p.price ?? 0}<span>/mo</span></div>
+            <div class="pricing-credits">${p.credits_included ?? 0} credits included</div>
+            <ul class="pricing-features">
+              ${features.map(f => `<li>${esc(f)}</li>`).join('')}
+            </ul>
+            <a href="pricing-detail.html?id=${p.id}" class="btn btn-primary" style="width:100%;justify-content:center">Select Plan</a>
+            ${isAdmin ? `<div class="admin-actions">
+              <a href="pricing-form.html?id=${p.id}" class="btn btn-secondary btn-sm">Edit</a>
+              <a href="pricing-delete.html?id=${p.id}" class="btn btn-danger btn-sm">Delete</a>
+            </div>` : ''}
+          </div>`;
+      }).join('');
+    }
+
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  </script>
+</body>
+</html>

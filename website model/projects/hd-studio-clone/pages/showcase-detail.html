@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Showcase Detail — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link active">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Showcase Detail</span>
+      <div class="topbar-actions" id="topbarActions">
+        <a href="showcase-list.html" class="btn btn-ghost btn-sm">← Back</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div id="detailCard" style="max-width:680px">
+        <div class="loader"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) { window.location.href = 'showcase-list.html'; }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const isAdmin = session?.user?.user_metadata?.role === 'admin';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.reload();
+    });
+
+    if (isAdmin) {
+      document.getElementById('topbarActions').innerHTML = `
+        <a href="showcase-form.html?id=${id}" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="showcase-delete.html?id=${id}" class="btn btn-danger btn-sm">Delete</a>
+        <a href="showcase-list.html" class="btn btn-ghost btn-sm">← Back</a>`;
+    }
+
+    const { data, error } = await supabase.from('showcase_items').select('*').eq('id', id).single();
+    if (error) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+      document.getElementById('detailCard').innerHTML = '';
+    } else {
+      document.getElementById('detailCard').innerHTML = `
+        <div class="card">
+          ${data.image_url ? `<img src="${esc(data.image_url)}" alt="${esc(data.title)}" style="width:100%;max-height:360px;object-fit:cover;border-radius:var(--radius) var(--radius) 0 0" onerror="this.style.display='none'">` : ''}
+          <div class="card-header">
+            <h2>${esc(data.title)}</h2>
+            ${data.category ? `<span class="badge badge-gray">${esc(data.category)}</span>` : ''}
+          </div>
+          <div class="card-body">
+            <dl class="detail-list">
+              <dt>Description</dt><dd>${esc(data.description)||'—'}</dd>
+              <dt>App URL</dt><dd>${data.app_url ? `<a href="${esc(data.app_url)}" target="_blank" rel="noopener">${esc(data.app_url)}</a>` : '—'}</dd>
+              <dt>Category</dt><dd>${esc(data.category)||'—'}</dd>
+              <dt>Added</dt><dd>${fmtDate(data.created_at)}</dd>
+            </dl>
+            ${data.app_url ? `<div style="margin-top:20px"><a href="${esc(data.app_url)}" target="_blank" rel="noopener" class="btn btn-primary">View App →</a></div>` : ''}
+          </div>
+        </div>`;
+    }
+
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+    function fmtDate(d) { return d ? new Date(d).toLocaleDateString() : '—'; }
+  </script>
+</body>
+</html>

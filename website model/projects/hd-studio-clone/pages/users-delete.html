@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete User — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link active">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar"><span class="page-title">Delete User</span></header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card confirm-box">
+        <div class="card-body">
+          <div class="confirm-icon">⚠️</div>
+          <h2 style="text-align:center;margin-bottom:12px">Delete this user?</h2>
+          <p id="confirmMsg" style="text-align:center;color:var(--text-muted);margin-bottom:8px"></p>
+          <div class="alert alert-warning">
+            ⚠️ Warning: deleting this user may affect related <strong>Projects</strong> records that reference their account.
+          </div>
+          <div class="form-actions" style="justify-content:center;margin-top:20px">
+            <button class="btn btn-danger" id="confirmBtn">Yes, delete</button>
+            <a id="cancelLink" href="users-list.html" class="btn btn-ghost">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+    import '../js/admin-guard.js';
+
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) { window.location.href = 'users-list.html'; }
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    const { data } = await supabase.from('users').select('email').eq('id', id).single();
+    if (data) {
+      document.getElementById('confirmMsg').textContent = `"${data.email}" will be permanently removed.`;
+      document.getElementById('cancelLink').href = `users-detail.html?id=${id}`;
+    }
+
+    document.getElementById('confirmBtn').addEventListener('click', async () => {
+      const btn = document.getElementById('confirmBtn');
+      btn.disabled = true; btn.textContent = 'Deleting…';
+      const { error } = await supabase.from('users').delete().eq('id', id);
+      if (error) {
+        document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+        btn.disabled = false; btn.textContent = 'Yes, delete';
+      } else {
+        window.location.href = 'users-list.html';
+      }
+    });
+  </script>
+</body>
+</html>

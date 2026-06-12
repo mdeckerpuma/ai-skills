@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pricing Detail — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link active">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Plan Detail</span>
+      <div class="topbar-actions" id="topbarActions">
+        <a href="pricing-list.html" class="btn btn-ghost btn-sm">← Back</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card" style="max-width:520px" id="detailCard">
+        <div class="loader"><div class="spinner"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    const id = new URLSearchParams(window.location.search).get('id');
+    if (!id) { window.location.href = 'pricing-list.html'; }
+
+    const { data: { session } } = await supabase.auth.getSession();
+    const isAdmin = session?.user?.user_metadata?.role === 'admin';
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.reload();
+    });
+
+    if (isAdmin) {
+      document.getElementById('topbarActions').innerHTML = `
+        <a href="pricing-form.html?id=${id}" class="btn btn-secondary btn-sm">Edit</a>
+        <a href="pricing-delete.html?id=${id}" class="btn btn-danger btn-sm">Delete</a>
+        <a href="pricing-list.html" class="btn btn-ghost btn-sm">← Back</a>`;
+    }
+
+    const { data, error } = await supabase.from('pricing_plans').select('*').eq('id', id).single();
+    if (error) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${error.message}</div>`;
+      document.getElementById('detailCard').innerHTML = '';
+    } else {
+      const features = Array.isArray(data.features) ? data.features : [];
+      document.getElementById('detailCard').innerHTML = `
+        <div class="card-header"><h2>${esc(data.name)}</h2></div>
+        <div class="card-body">
+          <dl class="detail-list">
+            <dt>Price</dt><dd style="font-size:24px;font-weight:800">$${data.price ?? 0}<span style="font-size:14px;font-weight:400;color:var(--text-muted)">/mo</span></dd>
+            <dt>Credits</dt><dd>${data.credits_included ?? 0} credits/month</dd>
+            <dt>Features</dt><dd>
+              <ul style="list-style:none;padding:0;margin:0">
+                ${features.map(f => `<li style="padding:4px 0;font-size:14px">✓ ${esc(f)}</li>`).join('')}
+              </ul>
+            </dd>
+            <dt>Created</dt><dd>${fmtDate(data.created_at)}</dd>
+          </dl>
+          <div style="margin-top:20px">
+            <button class="btn btn-primary" onclick="alert('Subscription flow — connect Stripe or your payment provider here.')">Subscribe to ${esc(data.name)}</button>
+          </div>
+        </div>`;
+    }
+
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmtDate(d) { return d ? new Date(d).toLocaleDateString() : '—'; }
+  </script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="sidebar-logo">HD<span>Studio</span></div>
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Platform</div>
+      <a href="../index.html" class="nav-link">🏠 Dashboard</a>
+      <a href="projects-list.html" class="nav-link">📁 Projects</a>
+      <div class="nav-section-label">Content</div>
+      <a href="showcase-list.html" class="nav-link">🎨 Showcase</a>
+      <a href="pricing-list.html" class="nav-link">💰 Pricing</a>
+      <div class="nav-section-label">Admin</div>
+      <a href="users-list.html" class="nav-link active">👥 Users</a>
+    </nav>
+    <div class="sidebar-footer">
+      <button class="logout-btn" id="logoutBtn">Sign out</button>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <span class="page-title">Users</span>
+      <div class="topbar-actions">
+        <a href="users-form.html" class="btn btn-primary btn-sm">+ New User</a>
+      </div>
+    </header>
+    <div class="content">
+      <div id="errorMsg"></div>
+      <div class="card">
+        <div class="card-body">
+          <div class="search-bar">
+            <input type="text" class="search-input" id="searchInput" placeholder="Search users…">
+          </div>
+          <div class="table-wrap">
+            <table id="dataTable">
+              <thead>
+                <tr>
+                  <th onclick="sortBy('email')">Email</th>
+                  <th onclick="sortBy('name')">Name</th>
+                  <th onclick="sortBy('role')">Role</th>
+                  <th onclick="sortBy('created_at')">Created</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <tr><td colspan="5"><div class="loader"><div class="spinner"></div></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="pagination"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+    import '../js/admin-guard.js';
+
+    const PAGE_SIZE = 25;
+    let allRows = [], filtered = [], currentPage = 1, sortKey = 'created_at', sortAsc = false;
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+
+    async function load() {
+      const { data, error } = await supabase.from('users').select('*').order('created_at', { ascending: false });
+      if (error) { showError(error.message); return; }
+      allRows = data || [];
+      applyFilter();
+    }
+
+    function applyFilter() {
+      const q = document.getElementById('searchInput').value.toLowerCase();
+      filtered = allRows.filter(r =>
+        (r.email || '').toLowerCase().includes(q) ||
+        (r.name || '').toLowerCase().includes(q) ||
+        (r.role || '').toLowerCase().includes(q)
+      );
+      currentPage = 1;
+      render();
+    }
+
+    window.sortBy = (key) => {
+      if (sortKey === key) sortAsc = !sortAsc; else { sortKey = key; sortAsc = true; }
+      filtered.sort((a, b) => {
+        const av = a[key] ?? '', bv = b[key] ?? '';
+        return sortAsc ? (av > bv ? 1 : -1) : (av < bv ? 1 : -1);
+      });
+      render();
+    };
+
+    function render() {
+      const start = (currentPage - 1) * PAGE_SIZE;
+      const page = filtered.slice(start, start + PAGE_SIZE);
+      const tbody = document.getElementById('tableBody');
+      if (!page.length) {
+        tbody.innerHTML = '<tr><td colspan="5"><div class="empty-state"><h3>No users found</h3><p>Try a different search term.</p></div></td></tr>';
+      } else {
+        tbody.innerHTML = page.map(r => `
+          <tr>
+            <td>${esc(r.email)}</td>
+            <td>${esc(r.name)}</td>
+            <td><span class="badge ${r.role === 'admin' ? 'badge-green' : 'badge-gray'}">${esc(r.role)}</span></td>
+            <td>${fmtDate(r.created_at)}</td>
+            <td><div class="row-actions">
+              <a href="users-detail.html?id=${r.id}" class="btn btn-ghost btn-sm">View</a>
+              <a href="users-form.html?id=${r.id}" class="btn btn-secondary btn-sm">Edit</a>
+              <a href="users-delete.html?id=${r.id}" class="btn btn-danger btn-sm">Delete</a>
+            </div></td>
+          </tr>`).join('');
+      }
+      renderPagination();
+    }
+
+    function renderPagination() {
+      const total = Math.ceil(filtered.length / PAGE_SIZE);
+      const el = document.getElementById('pagination');
+      if (total <= 1) { el.innerHTML = ''; return; }
+      let html = '';
+      if (currentPage > 1) html += `<button class="page-btn" onclick="goPage(${currentPage-1})">←</button>`;
+      for (let i = 1; i <= total; i++) {
+        if (i === 1 || i === total || Math.abs(i - currentPage) <= 1)
+          html += `<button class="page-btn ${i===currentPage?'active':''}" onclick="goPage(${i})">${i}</button>`;
+        else if (Math.abs(i - currentPage) === 2) html += `<span style="padding:0 4px">…</span>`;
+      }
+      if (currentPage < total) html += `<button class="page-btn" onclick="goPage(${currentPage+1})">→</button>`;
+      html += `<span class="page-info">Showing ${Math.min((currentPage-1)*PAGE_SIZE+1, filtered.length)}–${Math.min(currentPage*PAGE_SIZE, filtered.length)} of ${filtered.length}</span>`;
+      el.innerHTML = html;
+    }
+
+    window.goPage = (p) => { currentPage = p; render(); };
+
+    function showError(msg) {
+      document.getElementById('errorMsg').innerHTML = `<div class="alert alert-danger">${msg}</div>`;
+    }
+    function esc(s) { return String(s ?? '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+    function fmtDate(d) { return d ? new Date(d).toLocaleDateString() : '—'; }
+
+    document.getElementById('searchInput').addEventListener('input', applyFilter);
+    load();
+  </script>
+</body>
+</html>

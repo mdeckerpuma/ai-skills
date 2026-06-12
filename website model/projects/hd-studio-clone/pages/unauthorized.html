@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Access Denied — HD Studio Clone</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <link rel="stylesheet" href="../css/styles.css">
+  <style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--sidebar-bg); }
+    .access-box { background: var(--surface); border-radius: 12px; padding: 48px 40px; width: 100%; max-width: 420px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); text-align: center; }
+    .access-icon { font-size: 48px; margin-bottom: 16px; }
+    .access-title { font-size: 22px; font-weight: 800; color: var(--text); margin: 0 0 8px; }
+    .access-sub { font-size: 14px; color: var(--text-muted); margin: 0 0 32px; line-height: 1.6; }
+    .access-actions { display: flex; flex-direction: column; gap: 10px; }
+    .access-actions .btn { justify-content: center; }
+  </style>
+</head>
+<body>
+  <div class="access-box">
+    <div class="access-icon">🔒</div>
+    <h1 class="access-title">Access Denied</h1>
+    <p class="access-sub">You don't have permission to view this page.<br>Admin access is required.</p>
+    <div class="access-actions">
+      <a href="../index.html" class="btn btn-primary">Go to Dashboard</a>
+      <a href="login.html" class="btn btn-ghost" id="signOutLink">Sign in with a different account</a>
+    </div>
+  </div>
+
+  <script type="module">
+    import supabase from '../js/supabase-client.js';
+
+    document.getElementById('signOutLink').addEventListener('click', async (e) => {
+      e.preventDefault();
+      await supabase.auth.signOut();
+      window.location.href = 'login.html';
+    });
+  </script>
+</body>
+</html>
