@@ -3,7 +3,8 @@
     "allow": [
       "WebFetch",
       "WebSearch",
-      "Edit(~/.claude/skills/Builds/**)"
+      "Edit(~/.claude/skills/Builds/**)",
+      "Edit(~/.claude/skills/website model/**)"
     ]
   }
 }

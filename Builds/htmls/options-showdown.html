@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Options Showdown — 2-Player Quiz</title>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --p1: #e21b3c;
+      --p2: #1368ce;
+      --ans-a: #e21b3c;
+      --ans-b: #1368ce;
+      --ans-c: #d89e00;
+      --ans-d: #26890c;
+      --bg: #1a1a2e;
+      --surface: rgba(255,255,255,0.08);
+      --border: rgba(255,255,255,0.12);
+    }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: #fff;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      user-select: none;
+    }
+
+    /* ─── HEADER ─── */
+    #header {
+      background: linear-gradient(135deg, #46178f 0%, #2c0a6b 100%);
+      padding: 12px 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+      flex-shrink: 0;
+      z-index: 10;
+    }
+
+    .score-card {
+      background: rgba(255,255,255,0.12);
+      border-radius: 14px;
+      padding: 10px 22px;
+      min-width: 155px;
+      text-align: center;
+      border: 2px solid transparent;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .score-card.p1 { border-color: var(--p1); }
+    .score-card.p2 { border-color: var(--p2); }
+    .score-card.active {
+      transform: scale(1.06);
+      box-shadow: 0 0 22px rgba(255,255,255,0.35);
+    }
+    .score-card .sc-label { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.65; }
+    .score-card .sc-name { font-size: 15px; font-weight: 700; margin: 2px 0; }
+    .score-card .sc-pts  { font-size: 38px; font-weight: 900; line-height: 1; }
+    .score-card .sc-key  { font-size: 10px; opacity: 0.5; margin-top: 3px; }
+    .score-card.p1 .sc-pts { color: #ff8096; }
+    .score-card.p2 .sc-pts { color: #6db3ff; }
+
+    #logo { text-align: center; }
+    #logo h1 { font-size: 20px; font-weight: 900; letter-spacing: 2px; text-transform: uppercase; }
+    #logo .logo-sub { font-size: 11px; opacity: 0.55; letter-spacing: 1px; }
+
+    /* ─── BUZZ BANNER ─── */
+    #buzz-banner {
+      display: none;
+      background: linear-gradient(90deg, rgba(70,23,143,0.95), rgba(30,10,70,0.95));
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      padding: 8px 28px;
+      text-align: center;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      flex-shrink: 0;
+      animation: slideDown 0.25s ease;
+    }
+    #buzz-banner .bb-name { font-size: 18px; font-weight: 900; }
+    #buzz-timer {
+      display: inline-block;
+      background: rgba(255,255,255,0.15);
+      border-radius: 50px;
+      padding: 1px 12px;
+      margin-left: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+    #buzz-timer.urgent { color: #ff4444; animation: timerPulse 0.5s ease infinite; }
+
+    /* ─── PROGRESS BAR ─── */
+    #progress-bar {
+      height: 4px;
+      background: rgba(255,255,255,0.08);
+      flex-shrink: 0;
+      display: none;
+    }
+    #progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #26890c, #d89e00, #e21b3c);
+      transition: width 1s linear;
+    }
+
+    /* ─── MAIN ─── */
+    #main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px 20px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* ─── START SCREEN ─── */
+    #start-screen {
+      text-align: center;
+      max-width: 680px;
+      width: 100%;
+      animation: fadeIn 0.5s ease;
+    }
+    #start-screen h2 {
+      font-size: 52px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff8096, #a855f7, #6db3ff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      line-height: 1.1;
+      margin-bottom: 6px;
+    }
+    #start-screen .tagline {
+      font-size: 15px;
+      opacity: 0.6;
+      margin-bottom: 28px;
+      letter-spacing: 0.5px;
+    }
+
+    .player-inputs {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 22px;
+    }
+    .pi-card {
+      flex: 1;
+      background: var(--surface);
+      border: 2px solid transparent;
+      border-radius: 16px;
+      padding: 18px 20px;
+      text-align: center;
+    }
+    .pi-card.p1 { border-color: var(--p1); }
+    .pi-card.p2 { border-color: var(--p2); }
+    .pi-card label { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: 2px; opacity: 0.6; margin-bottom: 8px; }
+    .pi-card .pi-key {
+      font-size: 26px;
+      font-weight: 900;
+      background: rgba(255,255,255,0.12);
+      border-radius: 10px;
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 10px;
+    }
+    .p1 .pi-key { color: #ff8096; }
+    .p2 .pi-key { color: #6db3ff; }
+    .pi-card input {
+      width: 100%;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 9px 12px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      text-align: center;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .pi-card input:focus { border-color: rgba(255,255,255,0.4); }
+
+    .rules {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px 28px;
+      margin-bottom: 22px;
+      text-align: left;
+    }
+    .rules h3 { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: #a855f7; margin-bottom: 12px; }
+    .rules ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+    .rules li { display: flex; align-items: center; gap: 10px; font-size: 13px; opacity: 0.85; }
+    .rules li .ri { width: 24px; text-align: center; font-size: 16px; }
+
+    #start-btn {
+      background: linear-gradient(135deg, #46178f, #6c2eb3);
+      border: none;
+      color: #fff;
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 16px 56px;
+      border-radius: 50px;
+      cursor: pointer;
+      transition: all 0.25s;
+      box-shadow: 0 8px 32px rgba(70,23,143,0.6);
+    }
+    #start-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(70,23,143,0.75); }
+    #start-btn:active { transform: translateY(-1px); }
+
+    /* ─── QUESTION SCREEN ─── */
+    #question-screen {
+      width: 100%;
+      max-width: 860px;
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    #q-meta {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    #q-counter { font-size: 11px; opacity: 0.5; letter-spacing: 1px; text-transform: uppercase; }
+    #q-category {
+      background: rgba(168,85,247,0.25);
+      border: 1px solid rgba(168,85,247,0.4);
+      color: #c084fc;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      padding: 3px 11px;
+      border-radius: 50px;
+    }
+
+    #q-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px 32px;
+      text-align: center;
+      min-height: 88px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    #q-text { font-size: 20px; font-weight: 700; line-height: 1.45; }
+
+    #answers-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .ans-card {
+      border-radius: 14px;
+      padding: 16px 20px;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border: none;
+      color: #fff;
+      text-align: left;
+      transition: transform 0.15s, filter 0.2s, box-shadow 0.25s;
+      min-height: 64px;
+      position: relative;
+      overflow: hidden;
+    }
+    .ans-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: rgba(255,255,255,0);
+      transition: background 0.15s;
+    }
+    .ans-card:hover::after { background: rgba(255,255,255,0.12); }
+    .ans-card:active { transform: scale(0.975); }
+
+    .ans-card.a { background: var(--ans-a); }
+    .ans-card.b { background: var(--ans-b); }
+    .ans-card.c { background: var(--ans-c); }
+    .ans-card.d { background: var(--ans-d); }
+
+    .ans-num {
+      width: 32px;
+      height: 32px;
+      background: rgba(255,255,255,0.22);
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      flex-shrink: 0;
+    }
+    .ans-text { flex: 1; line-height: 1.3; }
+
+    /* Answer reveal states */
+    .ans-card.is-correct {
+      box-shadow: 0 0 0 3px #fff, 0 0 30px rgba(255,255,255,0.4);
+      transform: scale(1.025);
+      animation: correctPop 0.4s ease;
+    }
+    .ans-card.is-wrong { filter: brightness(0.4); transform: scale(0.975); }
+    .ans-card.was-selected-wrong { animation: shake 0.45s ease; }
+    .ans-card.locked { pointer-events: none; }
+    .ans-card.dimmed { filter: brightness(0.5); pointer-events: none; }
+
+    /* ─── BUZZ BUTTONS ─── */
+    #buzz-zone {
+      display: flex;
+      gap: 14px;
+    }
+    .buzz-btn {
+      flex: 1;
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 2px solid transparent;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      color: #fff;
+    }
+    .buzz-btn.p1 { background: rgba(226,27,60,0.2); border-color: var(--p1); }
+    .buzz-btn.p2 { background: rgba(19,104,206,0.2); border-color: var(--p2); }
+    .buzz-btn:hover { filter: brightness(1.25); transform: translateY(-2px); }
+    .buzz-btn:active { transform: translateY(0); }
+    .buzz-btn.fired { opacity: 0.4; pointer-events: none; }
+    .buzz-btn .bz-key {
+      font-size: 22px;
+      font-weight: 900;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .buzz-btn .bz-info { text-align: left; }
+    .buzz-btn .bz-name { font-size: 14px; }
+    .buzz-btn .bz-sub { font-size: 10px; opacity: 0.6; font-weight: 600; margin-top: 1px; }
+
+    /* ─── RESULT TOAST ─── */
+    #result-toast {
+      display: none;
+      position: fixed;
+      top: 80px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      text-align: center;
+      animation: toastIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    #result-toast .rt-main {
+      font-size: 32px;
+      font-weight: 900;
+      background: rgba(10,5,25,0.9);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 14px 36px;
+      border-radius: 18px;
+      white-space: nowrap;
+    }
+    #result-toast .rt-sub {
+      font-size: 13px;
+      opacity: 0.65;
+      margin-top: 6px;
+    }
+
+    #next-btn {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255,255,255,0.12);
+      border: 2px solid rgba(255,255,255,0.25);
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      padding: 13px 38px;
+      border-radius: 50px;
+      cursor: pointer;
+      z-index: 30;
+      transition: all 0.2s;
+      animation: fadeIn 0.4s ease 0.8s both;
+    }
+    #next-btn:hover { background: rgba(255,255,255,0.22); transform: translateX(-50%) translateY(-2px); }
+
+    /* ─── WIN SCREEN ─── */
+    #win-screen {
+      display: none;
+      text-align: center;
+      position: relative;
+      z-index: 1;
+      animation: fadeIn 0.5s ease;
+    }
+    #win-screen .trophy { font-size: 72px; display: block; margin-bottom: 6px; animation: trophyBounce 1.2s ease infinite; }
+    #win-screen .win-label { font-size: 14px; text-transform: uppercase; letter-spacing: 3px; opacity: 0.65; margin-bottom: 6px; }
+    #win-screen .win-name {
+      font-size: 52px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ffd700, #ffaa00, #ff8096);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 22px;
+      line-height: 1.1;
+    }
+    .final-score-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      margin-bottom: 28px;
+    }
+    .fsc {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 28px;
+      min-width: 130px;
+    }
+    .fsc.champ { border-color: #ffd700; background: rgba(255,215,0,0.12); }
+    .fsc .fsc-name { font-size: 12px; opacity: 0.65; margin-bottom: 4px; }
+    .fsc .fsc-pts { font-size: 38px; font-weight: 900; }
+    .fsc.champ .fsc-pts { color: #ffd700; }
+
+    #play-again-btn {
+      background: linear-gradient(135deg, #46178f, #6c2eb3);
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 15px 48px;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 32px rgba(70,23,143,0.6);
+      transition: all 0.25s;
+    }
+    #play-again-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(70,23,143,0.75); }
+
+    /* ─── CONFETTI ─── */
+    #confetti-canvas {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+    @keyframes slideDown { from { opacity:0; transform:translateY(-12px) } to { opacity:1; transform:translateY(0) } }
+    @keyframes toastIn { from { opacity:0; transform:translateX(-50%) scale(0.7) } to { opacity:1; transform:translateX(-50%) scale(1) } }
+    @keyframes correctPop { 0%{transform:scale(1)} 50%{transform:scale(1.05)} 100%{transform:scale(1.025)} }
+    @keyframes shake {
+      0%,100%{transform:translateX(0) scale(0.975)}
+      20%{transform:translateX(-8px) scale(0.975)}
+      40%{transform:translateX(8px) scale(0.975)}
+      60%{transform:translateX(-5px) scale(0.975)}
+      80%{transform:translateX(5px) scale(0.975)}
+    }
+    @keyframes trophyBounce { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+    @keyframes timerPulse { 0%,100%{opacity:1} 50%{opacity:0.5} }
+    @keyframes qSlideIn { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div id="header">
+  <div class="score-card p1" id="p1-card">
+    <div class="sc-label">Player 1</div>
+    <div class="sc-name" id="p1-name-disp">P1</div>
+    <div class="sc-pts" id="p1-pts">0</div>
+    <div class="sc-key">Q to buzz</div>
+  </div>
+  <div id="logo">
+    <h1>⚡ Options Showdown</h1>
+    <div class="logo-sub">First to 5 points wins</div>
+  </div>
+  <div class="score-card p2" id="p2-card">
+    <div class="sc-label">Player 2</div>
+    <div class="sc-name" id="p2-name-disp">P2</div>
+    <div class="sc-pts" id="p2-pts">0</div>
+    <div class="sc-key">P to buzz</div>
+  </div>
+</div>
+
+<!-- BUZZ BANNER -->
+<div id="buzz-banner">
+  <span class="bb-name" id="bb-name">Player 1</span>
+  <span> buzzed in! Pick your answer</span>
+  <span id="buzz-timer">10</span>
+</div>
+
+<!-- PROGRESS BAR -->
+<div id="progress-bar"><div id="progress-fill" style="width:100%"></div></div>
+
+<!-- MAIN -->
+<div id="main">
+
+  <!-- Start Screen -->
+  <div id="start-screen">
+    <h2>Options Showdown</h2>
+    <p class="tagline">Two players. One keyboard. First to 5 wins.</p>
+
+    <div class="player-inputs">
+      <div class="pi-card p1">
+        <label>Player 1 — Buzz Key</label>
+        <div class="pi-key">Q</div>
+        <input type="text" id="p1-name-input" value="Player 1" maxlength="16" autocomplete="off">
+      </div>
+      <div class="pi-card p2">
+        <label>Player 2 — Buzz Key</label>
+        <div class="pi-key">P</div>
+        <input type="text" id="p2-name-input" value="Player 2" maxlength="16" autocomplete="off">
+      </div>
+    </div>
+
+    <div class="rules">
+      <h3>How to Play</h3>
+      <ul>
+        <li><span class="ri">⚡</span> Question appears — press <strong>Q</strong> or <strong>P</strong> to buzz in first</li>
+        <li><span class="ri">🎯</span> Buzzed-in player clicks an answer (or presses <strong>1 2 3 4</strong>)</li>
+        <li><span class="ri">✅</span> Correct = <strong>+1 point</strong> — Wrong = no points for either player</li>
+        <li><span class="ri">⏱️</span> You have <strong>10 seconds</strong> to answer after buzzing in</li>
+        <li><span class="ri">🏆</span> First to <strong>5 points</strong> wins the game!</li>
+      </ul>
+    </div>
+
+    <button id="start-btn" onclick="startGame()">START GAME</button>
+  </div>
+
+  <!-- Question Screen -->
+  <div id="question-screen" style="display:none;flex-direction:column;gap:14px;width:100%;max-width:860px;">
+    <div id="q-meta">
+      <span id="q-counter">Q 1</span>
+      <span id="q-category">Basics</span>
+    </div>
+    <div id="q-box">
+      <div id="q-text"></div>
+    </div>
+    <div id="answers-grid">
+      <button class="ans-card a" onclick="selectAnswer(0)"><div class="ans-num">1</div><div class="ans-text" id="a0"></div></button>
+      <button class="ans-card b" onclick="selectAnswer(1)"><div class="ans-num">2</div><div class="ans-text" id="a1"></div></button>
+      <button class="ans-card c" onclick="selectAnswer(2)"><div class="ans-num">3</div><div class="ans-text" id="a2"></div></button>
+      <button class="ans-card d" onclick="selectAnswer(3)"><div class="ans-num">4</div><div class="ans-text" id="a3"></div></button>
+    </div>
+    <div id="buzz-zone">
+      <button class="buzz-btn p1" id="bz-p1" onclick="buzzIn(1)">
+        <div class="bz-key">Q</div>
+        <div class="bz-info"><div class="bz-name" id="bz-p1-name">Player 1</div><div class="bz-sub">Press Q to buzz in</div></div>
+      </button>
+      <button class="buzz-btn p2" id="bz-p2" onclick="buzzIn(2)">
+        <div class="bz-key">P</div>
+        <div class="bz-info"><div class="bz-name" id="bz-p2-name">Player 2</div><div class="bz-sub">Press P to buzz in</div></div>
+      </button>
+    </div>
+  </div>
+
+  <!-- Win Screen -->
+  <div id="win-screen" style="display:none;">
+    <span class="trophy">🏆</span>
+    <div class="win-label">Winner!</div>
+    <div class="win-name" id="win-name">Player 1</div>
+    <div class="final-score-row" id="final-scores"></div>
+    <button id="play-again-btn" onclick="resetGame()">PLAY AGAIN</button>
+  </div>
+
+</div>
+
+<!-- RESULT TOAST -->
+<div id="result-toast">
+  <div class="rt-main" id="rt-main"></div>
+  <div class="rt-sub" id="rt-sub"></div>
+</div>
+
+<!-- NEXT BUTTON -->
+<button id="next-btn" onclick="nextQuestion()">Next Question →</button>
+
+<!-- CONFETTI -->
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+// ============================================================
+//  QUESTIONS  (34 total — Basics / Greeks / Strategies / Vol / Advanced)
+// ============================================================
+const QUESTIONS = [
+  // ── BASICS ──
+  { cat:'Basics', q:'What does a call option give the holder the right to do?',
+    choices:['Buy the underlying at the strike price','Sell the underlying at the strike price','Receive dividends from the underlying','Borrow shares of the underlying'], ans:0 },
+
+  { cat:'Basics', q:'What is the maximum loss on a long call option?',
+    choices:['Unlimited','The strike price minus the premium','The premium paid','The current stock price'], ans:2 },
+
+  { cat:'Basics', q:'An option is "in the money" (ITM) when it has:',
+    choices:['Only time value','Intrinsic value','A delta above 0.75','Low implied volatility'], ans:1 },
+
+  { cat:'Basics', q:'Which option type gives the holder the right to SELL the underlying?',
+    choices:['Call','Put','Straddle','Strangle'], ans:1 },
+
+  { cat:'Basics', q:'What is a covered call?',
+    choices:['Buying a call with a protective put','Selling a call against long stock you own','Buying a call below the current price','A call that caps your losses automatically'], ans:1 },
+
+  { cat:'Basics', q:'Breakeven for a long call: $50 strike, $3 premium paid — what is it?',
+    choices:['$47','$50','$53','$56'], ans:2 },
+
+  { cat:'Basics', q:'Who is OBLIGATED to fulfill the contract when an option is exercised?',
+    choices:['The holder (buyer)','The writer (seller)','The broker','The OCC'], ans:1 },
+
+  { cat:'Basics', q:'An option with zero intrinsic value is described as:',
+    choices:['In the money','At the money or out of the money','Deep in the money','Expired'], ans:1 },
+
+  // ── GREEKS ──
+  { cat:'Greeks', q:'Which Greek measures sensitivity to a $1 move in the underlying?',
+    choices:['Theta','Vega','Delta','Gamma'], ans:2 },
+
+  { cat:'Greeks', q:'Theta represents:',
+    choices:['The rate of change of delta','Daily time decay of an option','Sensitivity to implied volatility','Sensitivity to interest rates'], ans:1 },
+
+  { cat:'Greeks', q:'An ATM call option has a delta of approximately:',
+    choices:['0.00','1.00','0.50','-0.50'], ans:2 },
+
+  { cat:'Greeks', q:'Vega measures sensitivity to changes in:',
+    choices:['Time to expiration','Interest rates','Implied volatility','The underlying price'], ans:2 },
+
+  { cat:'Greeks', q:'Gamma is HIGHEST for options that are:',
+    choices:['Deep in the money','Deep out of the money','At the money near expiration','Long-dated and in the money'], ans:2 },
+
+  { cat:'Greeks', q:'Option delta is 0.40 and stock rises $2. Price increases by approximately:',
+    choices:['$0.40','$0.80','$2.00','$4.00'], ans:1 },
+
+  { cat:'Greeks', q:'Which Greek is the rate of change of delta?',
+    choices:['Theta','Vega','Rho','Gamma'], ans:3 },
+
+  { cat:'Greeks', q:'A short put has which delta sign?',
+    choices:['Negative (like long put)','Positive','Zero','Depends on the strike'], ans:1 },
+
+  { cat:'Greeks', q:'Theta is most harmful to which position?',
+    choices:['Short options (sellers)','Long options (buyers)','Stock holders','Futures traders'], ans:1 },
+
+  // ── STRATEGIES ──
+  { cat:'Strategies', q:'A long straddle profits when:',
+    choices:['The stock stays flat','Implied volatility collapses','The stock makes a large move in either direction','Time decay accelerates'], ans:2 },
+
+  { cat:'Strategies', q:'Which position benefits MOST from a drop in implied volatility?',
+    choices:['Long straddle','Long call','Long put','Short straddle'], ans:3 },
+
+  { cat:'Strategies', q:'An iron condor profits when:',
+    choices:['The stock makes a large breakout move','IV spikes sharply','The stock stays within a defined range at expiration','One spread expires in the money'], ans:2 },
+
+  { cat:'Strategies', q:'A bull put spread involves:',
+    choices:['Buying a higher strike put and selling a lower strike put','Selling a higher strike put and buying a lower strike put','Buying two puts at the same strike','Selling a put and buying a call at the same strike'], ans:1 },
+
+  { cat:'Strategies', q:'A calendar (time) spread profits primarily from:',
+    choices:['A large move in the underlying','A drop in implied volatility across the board','The front month decaying faster than the back month','The back month decaying faster than the front month'], ans:2 },
+
+  { cat:'Strategies', q:'A short strangle is profitable when:',
+    choices:['The stock makes a sharp move in either direction','The stock stays between the two strikes at expiration','IV increases significantly','The short put expires in the money'], ans:1 },
+
+  { cat:'Strategies', q:'Maximum profit on a short iron condor is:',
+    choices:['Unlimited','The width of the wider spread','The net premium collected','The difference between the strikes minus the premium'], ans:2 },
+
+  // ── VOLATILITY ──
+  { cat:'Volatility', q:'Implied volatility (IV) is best described as:',
+    choices:['Actual historical volatility of a stock','Market\'s expectation of future volatility priced into options','The annualized standard deviation of past returns','The volatility of options prices themselves'], ans:1 },
+
+  { cat:'Volatility', q:'If IV Rank (IVR) is 90, it means:',
+    choices:['IV is at the 90th percentile of its 52-week range','IV is 90% higher than the S&P average','The stock will move 90% of its expected range','Historical vol is 90% of implied vol'], ans:0 },
+
+  { cat:'Volatility', q:'Volatility skew in equities typically shows:',
+    choices:['Higher IV for higher strikes vs lower strikes','Higher IV for lower strikes (puts) vs higher strikes','Equal IV across all strikes','IV that increases with time to expiration'], ans:1 },
+
+  { cat:'Volatility', q:'When IV is unusually high, options SELLERS prefer to:',
+    choices:['Wait for IV to rise further','Buy options to profit from the move','Sell options to collect elevated premium','Close all positions'], ans:2 },
+
+  // ── ADVANCED ──
+  { cat:'Advanced', q:'A reverse conversion (rev con) consists of:',
+    choices:['Long stock + long put + short call (same strike/expiry)','Short stock + long call + short put (same strike/expiry)','Long call + long put at different strikes','Short strangle + long straddle'], ans:1 },
+
+  { cat:'Advanced', q:'Put-call parity (European options) states:',
+    choices:['Puts and calls at same strike always have the same price','C + PV(K) = P + S (call + PV of strike = put + stock)','A call is always worth more than a put at same strike','ATM puts and calls must have equal absolute delta'], ans:1 },
+
+  { cat:'Advanced', q:'A synthetic long stock position consists of:',
+    choices:['Long call + short put at same strike and expiration','Short call + long put at same strike and expiration','Long two calls at different strikes','Long stock + long put'], ans:0 },
+
+  { cat:'Advanced', q:'Gamma scalping means:',
+    choices:['Selling gamma to reduce position risk','Owning options and delta-hedging to capture realized vol P&L','Trading gamma between expiration cycles','Rolling an iron condor to collect more premium'], ans:1 },
+
+  { cat:'Advanced', q:'A negative gamma position means:',
+    choices:['The position gains as the stock moves','Delta moves in your favor as stock moves','Delta moves against you as stock moves','No time decay exposure'], ans:2 },
+
+  { cat:'Advanced', q:'A conversion arbitrage consists of:',
+    choices:['Short stock + long call + short put (same strike/expiry)','Long stock + long put + short call (same strike/expiry)','Long two calls and short a put','Long stock + short call only'], ans:1 },
+];
+
+// ============================================================
+//  AUDIO
+// ============================================================
+let _actx = null;
+function actx() { return _actx || (_actx = new (window.AudioContext || window.webkitAudioContext)()); }
+
+function tone(freq, dur, type='sine', vol=0.28) {
+  try {
+    const ctx = actx(), o = ctx.createOscillator(), g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = type; o.frequency.setValueAtTime(freq, ctx.currentTime);
+    g.gain.setValueAtTime(vol, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + dur);
+    o.start(); o.stop(ctx.currentTime + dur);
+  } catch(e){}
+}
+
+function sfxBuzz()    { tone(920, 0.12, 'square', 0.18); }
+function sfxCorrect() { tone(523,0.1); setTimeout(()=>tone(659,0.1),100); setTimeout(()=>tone(784,0.22),200); }
+function sfxWrong()   { tone(180, 0.32, 'sawtooth', 0.14); }
+function sfxWin()     { [523,659,784,1047].forEach((n,i)=>setTimeout(()=>tone(n,0.28),i*130)); }
+
+// ============================================================
+//  GAME STATE
+// ============================================================
+const WIN_AT = 5;
+let gs       = 'start';   // start | question | buzzed | reveal | win
+let scores   = {p1:0, p2:0};
+let p1n      = 'Player 1';
+let p2n      = 'Player 2';
+let pool     = [];
+let qi       = 0;
+let buzzed   = null;      // 1 or 2
+let canBuzz  = false;
+let canAns   = false;
+let timerInt = null;
+let tLeft    = 10;
+let choices  = [];        // shuffled choice objects {text, correct}
+
+// ============================================================
+//  HELPERS
+// ============================================================
+function shuffle(a) {
+  const b = [...a];
+  for (let i = b.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [b[i],b[j]] = [b[j],b[i]];
+  }
+  return b;
+}
+
+function $  (id) { return document.getElementById(id); }
+function cls(el, add, rm=[]) { el.classList.add(...(Array.isArray(add)?add:[add])); rm.forEach(c=>el.classList.remove(c)); }
+function rcls(el, ...cs) { cs.forEach(c=>el.classList.remove(c)); }
+
+function setScreen(s) {
+  $('start-screen').style.display    = s==='start'    ? 'block' : 'none';
+  $('question-screen').style.display = s==='question' ? 'flex'  : 'none';
+  $('win-screen').style.display      = s==='win'      ? 'block' : 'none';
+  $('result-toast').style.display    = 'none';
+  $('next-btn').style.display        = 'none';
+  $('buzz-banner').style.display     = 'none';
+  $('progress-bar').style.display    = s==='question' ? 'block' : 'none';
+}
+
+function syncScores() {
+  $('p1-pts').textContent = scores.p1;
+  $('p2-pts').textContent = scores.p2;
+}
+
+// ============================================================
+//  START
+// ============================================================
+function startGame() {
+  p1n = ($('p1-name-input').value||'').trim() || 'Player 1';
+  p2n = ($('p2-name-input').value||'').trim() || 'Player 2';
+  ['p1-name-disp','bz-p1-name'].forEach(id => $(id).textContent = p1n);
+  ['p2-name-disp','bz-p2-name'].forEach(id => $(id).textContent = p2n);
+  scores = {p1:0, p2:0};
+  syncScores();
+  pool = shuffle(QUESTIONS);
+  qi   = 0;
+  setScreen('question');
+  loadQuestion();
+}
+
+// ============================================================
+//  LOAD QUESTION
+// ============================================================
+function loadQuestion() {
+  if (qi >= pool.length) { pool = shuffle(QUESTIONS); qi = 0; } // refill if exhausted
+
+  const q = pool[qi];
+  gs = 'question'; canBuzz = true; canAns = false; buzzed = null;
+
+  $('q-counter').textContent  = `Q ${qi+1}`;
+  $('q-category').textContent = q.cat;
+  $('q-text').textContent     = q.q;
+
+  // Shuffle choices preserving correct flag
+  choices = shuffle(q.choices.map((t,i)=>({text:t, correct:i===q.ans})));
+  choices.forEach((c,i)=>{ $(`a${i}`).textContent = c.text; });
+
+  // Reset card states
+  document.querySelectorAll('.ans-card').forEach(c=>{
+    rcls(c,'is-correct','is-wrong','was-selected-wrong','locked','dimmed');
+  });
+
+  // Reset buzz buttons
+  rcls($('bz-p1'),'fired'); rcls($('bz-p2'),'fired');
+  $('p1-card').classList.remove('active');
+  $('p2-card').classList.remove('active');
+
+  $('buzz-banner').style.display = 'none';
+  $('progress-bar').style.display = 'block';
+  $('progress-fill').style.width = '100%';
+
+  // Animate in
+  const qs = $('question-screen');
+  qs.style.animation = 'none';
+  requestAnimationFrame(()=>{ qs.style.animation = 'qSlideIn 0.35s ease'; });
+}
+
+// ============================================================
+//  BUZZ IN
+// ============================================================
+function buzzIn(player) {
+  if (gs !== 'question' || !canBuzz) return;
+  canBuzz = false; buzzed = player; gs = 'buzzed'; canAns = true;
+
+  sfxBuzz();
+
+  const nm = player===1 ? p1n : p2n;
+  const col = player===1 ? '#ff8096' : '#6db3ff';
+  $('bb-name').textContent = nm;
+  $('bb-name').style.color = col;
+
+  $(`p${player}-card`).classList.add('active');
+  cls($(`bz-p${player===1?2:1}`),'fired');
+
+  // Show banner
+  const bb = $('buzz-banner');
+  bb.style.display = 'block'; bb.style.animation='none';
+  requestAnimationFrame(()=>{ bb.style.animation='slideDown 0.25s ease'; });
+
+  // Timer
+  tLeft = 10;
+  const bt = $('buzz-timer');
+  bt.textContent = tLeft; bt.classList.remove('urgent');
+  $('progress-fill').style.width = '100%';
+
+  timerInt = setInterval(()=>{
+    tLeft--;
+    bt.textContent = tLeft;
+    $('progress-fill').style.width = (tLeft/10*100)+'%';
+    if (tLeft <= 3) bt.classList.add('urgent');
+    if (tLeft <= 0) {
+      clearInterval(timerInt);
+      revealAnswer(false, -1);
+    }
+  }, 1000);
+}
+
+// ============================================================
+//  SELECT ANSWER
+// ============================================================
+function calcPoints(timeLeft) {
+  if (timeLeft >= 8) return 3;
+  if (timeLeft >= 4) return 2;
+  return 1;
+}
+
+function selectAnswer(idx) {
+  if (gs !== 'buzzed' || !canAns) return;
+  canAns = false;
+  clearInterval(timerInt);
+  $('progress-bar').style.display = 'none';
+
+  const captured = tLeft;
+  const correct = choices[idx].correct;
+
+  // Mark cards
+  document.querySelectorAll('.ans-card').forEach((c,i)=>{
+    c.classList.add('locked');
+    if (choices[i].correct)         c.classList.add('is-correct');
+    else if (i===idx && !correct)   c.classList.add('is-wrong','was-selected-wrong');
+    else                            c.classList.add('is-wrong');
+  });
+
+  revealAnswer(correct, idx, captured);
+}
+
+// ============================================================
+//  REVEAL
+// ============================================================
+function revealAnswer(correct, idx, timeLeft=0) {
+  gs = 'reveal'; canBuzz = false; canAns = false;
+  $('buzz-banner').style.display = 'none';
+  $('p1-card').classList.remove('active');
+  $('p2-card').classList.remove('active');
+
+  const nm = buzzed===1 ? p1n : p2n;
+
+  if (correct) {
+    const pts = calcPoints(timeLeft);
+    scores['p'+buzzed] += pts;
+    syncScores();
+    sfxCorrect();
+    $(`p${buzzed}-card`).classList.add('active');
+    setTimeout(()=>$(`p${buzzed}-card`).classList.remove('active'), 900);
+    const label = pts===3 ? '⚡ Blazing!' : pts===2 ? '🔥 Fast!' : '✅ Correct';
+    showToast(`${label} +${pts}`, `+${pts} point${pts>1?'s':''} for ${nm}`, '#26890c');
+    if (scores.p1 >= WIN_AT || scores.p2 >= WIN_AT) {
+      setTimeout(()=>showWin(buzzed), 1700);
+      return;
+    }
+  } else {
+    sfxWrong();
+    showToast(idx===-1 ? `⏱️ Time's up!` : `❌ Wrong!`, `No points awarded`, '#e21b3c');
+  }
+
+  qi++;
+  setTimeout(()=>{ $('next-btn').style.display = 'block'; }, 900);
+}
+
+function showToast(main, sub, color) {
+  const t = $('result-toast');
+  $('rt-main').textContent = main;
+  $('rt-main').style.color = color;
+  $('rt-sub').textContent  = sub;
+  t.style.display = 'block';
+  t.style.animation = 'none';
+  requestAnimationFrame(()=>{ t.style.animation = 'toastIn 0.35s cubic-bezier(0.175,0.885,0.32,1.275)'; });
+}
+
+// ============================================================
+//  NEXT
+// ============================================================
+function nextQuestion() {
+  $('result-toast').style.display = 'none';
+  $('next-btn').style.display = 'none';
+  document.querySelectorAll('.ans-card').forEach(c=>{
+    rcls(c,'is-correct','is-wrong','was-selected-wrong','locked','dimmed');
+  });
+  loadQuestion();
+}
+
+// ============================================================
+//  WIN
+// ============================================================
+function showWin(player) {
+  setScreen('win');
+  const wn = player===1 ? p1n : p2n;
+  const ln = player===1 ? p2n : p1n;
+  const wp = scores['p'+player];
+  const lp = scores['p'+(player===1?2:1)];
+
+  $('win-name').textContent = wn;
+  $('final-scores').innerHTML = `
+    <div class="fsc champ"><div class="fsc-name">${wn}</div><div class="fsc-pts">${wp}</div></div>
+    <div class="fsc"><div class="fsc-name">${ln}</div><div class="fsc-pts">${lp}</div></div>`;
+
+  $('win-screen').style.display = 'block';
+  sfxWin();
+  confettiStart();
+}
+
+function resetGame() {
+  confettiStop();
+  scores = {p1:0, p2:0};
+  syncScores();
+  setScreen('start');
+  $('start-screen').style.display = 'block';
+}
+
+// ============================================================
+//  KEYBOARD
+// ============================================================
+document.addEventListener('keydown', e=>{
+  if (e.repeat) return;
+  const k = e.key.toLowerCase();
+
+  if (gs==='start' && k==='enter') { startGame(); return; }
+
+  if (gs==='question' && canBuzz) {
+    if (k==='q') { e.preventDefault(); buzzIn(1); }
+    if (k==='p') { e.preventDefault(); buzzIn(2); }
+  }
+
+  if (gs==='buzzed' && canAns) {
+    if (k==='1') { e.preventDefault(); selectAnswer(0); }
+    if (k==='2') { e.preventDefault(); selectAnswer(1); }
+    if (k==='3') { e.preventDefault(); selectAnswer(2); }
+    if (k==='4') { e.preventDefault(); selectAnswer(3); }
+  }
+
+  if (gs==='reveal' && (k===' ' || k==='enter') && $('next-btn').style.display!=='none') {
+    e.preventDefault(); nextQuestion();
+  }
+});
+
+// ============================================================
+//  CONFETTI
+// ============================================================
+const cvs = $('confetti-canvas');
+const cx  = cvs.getContext('2d');
+const COLORS = ['#e21b3c','#1368ce','#d89e00','#26890c','#a855f7','#ff8096','#ffd700','#6db3ff'];
+let pieces = [], confRaf = null, confRunning = false;
+
+function confettiStart() {
+  cvs.width  = window.innerWidth;
+  cvs.height = window.innerHeight;
+  pieces = Array.from({length:160}, ()=>({
+    x: Math.random()*cvs.width,
+    y: -Math.random()*cvs.height*0.5,
+    w: 8+Math.random()*10,
+    h: 4+Math.random()*6,
+    color: COLORS[Math.floor(Math.random()*COLORS.length)],
+    rot: Math.random()*Math.PI*2,
+    rs: (Math.random()-0.5)*0.14,
+    vx: (Math.random()-0.5)*2.2,
+    vy: 2.2+Math.random()*3.8,
+    a: 1
+  }));
+  confRunning = true;
+  confettiFrame();
+}
+
+function confettiFrame() {
+  if (!confRunning) return;
+  cx.clearRect(0,0,cvs.width,cvs.height);
+  let any = false;
+  pieces.forEach(p=>{
+    p.x+=p.vx; p.y+=p.vy; p.rot+=p.rs;
+    if (p.y > cvs.height*0.65) p.a = Math.max(0, p.a-0.022);
+    if (p.a>0) {
+      any = true;
+      cx.save(); cx.globalAlpha=p.a; cx.translate(p.x,p.y); cx.rotate(p.rot);
+      cx.fillStyle=p.color; cx.fillRect(-p.w/2,-p.h/2,p.w,p.h);
+      cx.restore();
+    }
+  });
+  if (any) confRaf = requestAnimationFrame(confettiFrame);
+}
+
+function confettiStop() {
+  confRunning = false;
+  if (confRaf) cancelAnimationFrame(confRaf);
+  cx.clearRect(0,0,cvs.width,cvs.height);
+}
+
+window.addEventListener('resize', ()=>{
+  cvs.width=window.innerWidth; cvs.height=window.innerHeight;
+});
+</script>
+</body>
+</html>
